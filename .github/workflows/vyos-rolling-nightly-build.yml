@@ -1,0 +1,91 @@
+name: VyOS rolling nightly build
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+  workflow_dispatch:
+
+env:
+  minisign_key: ${{ secrets.minisign_key }}
+  minisign_password: ${{ secrets.minisign_password }}
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+
+      - name: Set VyOS version
+        id: set_vyos_version
+        run: |
+          echo "VYOS_VERSION=1.4-rolling-$(date -u +%Y%m%d%H%M)" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+
+      - name: Update latest_build.txt
+        run: echo $(date -u +%Y%m%d%H%M) > $GITHUB_WORKSPACE/latest_build.txt
+
+      - name: Create autocommit and tag
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          tagging_message: ${{ env.VYOS_VERSION }}
+          commit_message: ${{ env.VYOS_VERSION }}
+
+      - name: Git clone vyos-build
+        run: git clone -b current --single-branch https://github.com/vyos/vyos-build
+
+      - name: Build ISO
+        run: |
+          docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --debian-mirror http://deb.debian.org/debian/ --build-type release --version "${VYOS_VERSION}" iso
+ 
+      # - name: Debug
+      #   run: |
+      #     mkdir -p ./vyos-build/build/
+      #     echo "TEST" > ./vyos-build/build/live-image-amd64.hybrid.iso
+
+      - name: Copy ISO
+        run: |
+          cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
+
+      - name: Sign ISO (Minisign)
+        run: |
+          echo 'untrusted comment: minisign encrypted secret key' > minisign.key
+          echo $minisign_key >> minisign.key
+          shasum minisign.key
+          echo $minisign_password | $GITHUB_WORKSPACE/bin/minisign -s minisign.key -Sm ./vyos-$VYOS_VERSION-amd64.iso
+          $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$VYOS_VERSION-amd64.iso -x ./vyos-$VYOS_VERSION-amd64.iso.minisig -p $GITHUB_WORKSPACE/minisign.pub
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload ISO's Minisign artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VYOS_VERSION }}
+          fail_on_unmatched_files: true
+          files: |
+            ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
+            ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+
+      - name: Remove old releases
+        uses: dev-drprasad/delete-older-releases@v0.2.1
+        with:
+          keep_latest: 30
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
