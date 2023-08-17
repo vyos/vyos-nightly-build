@@ -6,10 +6,6 @@ on:
 
   workflow_dispatch:
 
-env:
-  minisign_key: ${{ secrets.minisign_key }}
-  minisign_password: ${{ secrets.minisign_password }}
-
 jobs:
   build-iso:
     runs-on: ubuntu-latest
@@ -56,6 +52,31 @@ jobs:
           shasum minisign.key
           echo $minisign_password | $GITHUB_WORKSPACE/bin/minisign -s minisign.key -Sm ./vyos-$VYOS_VERSION-amd64.iso
           $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$VYOS_VERSION-amd64.iso -x ./vyos-$VYOS_VERSION-amd64.iso.minisig -p $GITHUB_WORKSPACE/minisign.pub
+        env:
+          minisign_key: ${{ secrets.minisign_key }}
+          minisign_password: ${{ secrets.minisign_password }}
+
+      - name: Upload ISO to S3 Glacier
+        uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          command: cp
+          source: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+          aws_region: us-east-1
+          flags: --storage-class GLACIER
+
+      - name: Upload ISO's signature to S3 Glacier
+        uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          command: cp
+          source: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+          aws_region: us-east-1
+          flags: --storage-class GLACIER
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v3
@@ -89,3 +110,16 @@ jobs:
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
+      - name: Send Slack notification on fail
+        if: failure()
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "*vyos-rolling-nightly-builds*\nGitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
