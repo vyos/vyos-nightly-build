@@ -35,11 +35,12 @@ jobs:
       - name: Build ISO
         run: |
           docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --version "${VYOS_VERSION}" iso
-      #####
+
+      ##### DEBUG #####
       # - run: |
       #     mkdir -p ./vyos-build/build/
       #     echo "TEST" > ./vyos-build/build/live-image-amd64.hybrid.iso
-      #####
+      #################
 
       - name: Make archive for smoketests
         run: |
@@ -66,85 +67,85 @@ jobs:
             rm -rf ~/vyos-build || true
 
 
-      # - name: Copy ISO
-      #   run: |
-      #     cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
+      - name: Copy ISO
+        run: |
+          cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
 
-      # - name: Sign ISO (Minisign)
-      #   run: |
-      #     echo 'untrusted comment: minisign encrypted secret key' > minisign.key
-      #     echo $minisign_key >> minisign.key
-      #     shasum minisign.key
-      #     echo $minisign_password | $GITHUB_WORKSPACE/bin/minisign -s minisign.key -Sm ./vyos-$VYOS_VERSION-amd64.iso
-      #     $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$VYOS_VERSION-amd64.iso -x ./vyos-$VYOS_VERSION-amd64.iso.minisig -p $GITHUB_WORKSPACE/minisign.pub
-      #   env:
-      #     minisign_key: ${{ secrets.minisign_key }}
-      #     minisign_password: ${{ secrets.minisign_password }}
+      - name: Sign ISO (Minisign)
+        run: |
+          echo 'untrusted comment: minisign encrypted secret key' > minisign.key
+          echo $minisign_key >> minisign.key
+          shasum minisign.key
+          echo $minisign_password | $GITHUB_WORKSPACE/bin/minisign -s minisign.key -Sm ./vyos-$VYOS_VERSION-amd64.iso
+          $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$VYOS_VERSION-amd64.iso -x ./vyos-$VYOS_VERSION-amd64.iso.minisig -p $GITHUB_WORKSPACE/minisign.pub
+        env:
+          minisign_key: ${{ secrets.minisign_key }}
+          minisign_password: ${{ secrets.minisign_password }}
 
-      # - name: Upload ISO to S3 Glacier
-      #   uses: keithweaver/aws-s3-github-action@v1.0.0
-      #   with:
-      #     command: cp
-      #     source: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
-      #     destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso
-      #     aws_access_key_id: ${{ secrets.aws_access_key_id }}
-      #     aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
-      #     aws_region: us-east-1
-      #     flags: --storage-class GLACIER
+      - name: Upload ISO to S3 Glacier
+        uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          command: cp
+          source: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+          aws_region: us-east-1
+          flags: --storage-class GLACIER
 
-      # - name: Upload ISO's signature to S3 Glacier
-      #   uses: keithweaver/aws-s3-github-action@v1.0.0
-      #   with:
-      #     command: cp
-      #     source: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
-      #     destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
-      #     aws_access_key_id: ${{ secrets.aws_access_key_id }}
-      #     aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
-      #     aws_region: us-east-1
-      #     flags: --storage-class GLACIER
+      - name: Upload ISO's signature to S3 Glacier
+        uses: keithweaver/aws-s3-github-action@v1.0.0
+        with:
+          command: cp
+          source: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          aws_access_key_id: ${{ secrets.aws_access_key_id }}
+          aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
+          aws_region: us-east-1
+          flags: --storage-class GLACIER
 
-      # - name: Upload ISO artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: vyos-${{ env.VYOS_VERSION }}-amd64.iso
-      #     path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
-      #     retention-days: 30
-      #     if-no-files-found: error
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          retention-days: 30
+          if-no-files-found: error
 
-      # - name: Upload ISO's Minisign artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
-      #     path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
-      #     retention-days: 30
-      #     if-no-files-found: error
+      - name: Upload ISO's Minisign artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          retention-days: 30
+          if-no-files-found: error
 
-      # - name: Publish release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     tag_name: ${{ env.VYOS_VERSION }}
-      #     fail_on_unmatched_files: true
-      #     files: |
-      #       ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
-      #       ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VYOS_VERSION }}
+          fail_on_unmatched_files: true
+          files: |
+            ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
+            ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
 
-      # - name: Remove old releases
-      #   uses: dev-drprasad/delete-older-releases@v0.2.1
-      #   with:
-      #     keep_latest: 30
-      #     delete_tags: true
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+      - name: Remove old releases
+        uses: dev-drprasad/delete-older-releases@v0.2.1
+        with:
+          keep_latest: 30
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
-      # - name: Send Slack notification on fail
-      #   if: failure()
-      #   id: slack
-      #   uses: slackapi/slack-github-action@v1.24.0
-      #   with:
-      #     payload: |
-      #       {
-      #         "text": "*vyos-rolling-nightly-builds*\nGitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-      #       }
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      - name: Send Slack notification on fail
+        if: failure()
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "*vyos-rolling-nightly-builds*\nGitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
