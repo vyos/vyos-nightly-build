@@ -66,19 +66,20 @@ jobs:
             './vyos-$VYOS_VERSION-amd64.iso' => ~/vyos-build/build/
           last_ssh: |
             mv ~/vyos-build/build/vyos-$VYOS_VERSION-amd64.iso ~/vyos-build/build/live-image-amd64.hybrid.iso
+            docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make test
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testc
             rm -rf ~/vyos-build || true
 
-      - name: Sign ISO (Minisign)
-        run: |
-          echo 'untrusted comment: minisign encrypted secret key' > minisign.key
-          echo $minisign_key >> minisign.key
-          shasum minisign.key
-          echo $minisign_password | $GITHUB_WORKSPACE/bin/minisign -s minisign.key -Sm ./vyos-$VYOS_VERSION-amd64.iso
-          $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$VYOS_VERSION-amd64.iso -x ./vyos-$VYOS_VERSION-amd64.iso.minisig -p $GITHUB_WORKSPACE/minisign.pub
-        env:
-          minisign_key: ${{ secrets.minisign_key }}
-          minisign_password: ${{ secrets.minisign_password }}
+      # - name: Sign ISO (Minisign)
+      #   run: |
+      #     echo 'untrusted comment: minisign encrypted secret key' > minisign.key
+      #     echo $minisign_key >> minisign.key
+      #     shasum minisign.key
+      #     echo $minisign_password | $GITHUB_WORKSPACE/bin/minisign -s minisign.key -Sm ./vyos-$VYOS_VERSION-amd64.iso
+      #     $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$VYOS_VERSION-amd64.iso -x ./vyos-$VYOS_VERSION-amd64.iso.minisig -p $GITHUB_WORKSPACE/minisign.pub
+      #   env:
+      #     minisign_key: ${{ secrets.minisign_key }}
+      #     minisign_password: ${{ secrets.minisign_password }}
 
       # - name: Upload ISO to S3 Glacier
       #   uses: keithweaver/aws-s3-github-action@v1.0.0
