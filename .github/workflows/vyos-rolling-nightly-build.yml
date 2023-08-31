@@ -29,24 +29,21 @@ jobs:
           tagging_message: ${{ env.VYOS_VERSION }}
           commit_message: ${{ env.VYOS_VERSION }}
 
-      # - name: Git clone vyos-build
-      #   run: git clone -b current --single-branch https://github.com/vyos/vyos-build
+      - name: Git clone vyos-build
+        run: git clone -b current --single-branch https://github.com/vyos/vyos-build
 
-      # - name: Build ISO
-      #   run: |
-      #     docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --version "${VYOS_VERSION}" iso
-      ######
+      - name: Build ISO
+        run: |
+          docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --version "${VYOS_VERSION}" iso
+      #####
       # - run: |
       #     mkdir -p ./vyos-build/build/
       #     echo "TEST" > ./vyos-build/build/live-image-amd64.hybrid.iso
-      ######
-      # - name: Copy ISO
-      #   run: |
-      #     cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
+      #####
 
-      - run: |
-          wget https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/1.4-rolling-202308310021/vyos-1.4-rolling-202308310021-amd64.iso -O ./vyos-$VYOS_VERSION-amd64.iso
-
+      - name: Copy ISO
+        run: |
+          cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
 
       - name: Check ISO
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
