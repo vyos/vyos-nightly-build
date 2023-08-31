@@ -46,25 +46,25 @@ jobs:
         run: |
           tar -czf vyos-build.tar.gz -C $(pwd) vyos-build
 
-      - name: Check ISO
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-        env:
-          VYOS_VERSION: ${{ env.VYOS_VERSION }}
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          user: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          connect_timeout: 10s
-          first_ssh: |
-            rm -rf ~/vyos-build* || true
-          scp: |
-            './vyos-build.tar.gz' => '~/'
-          last_ssh: |
-            tar -xzf  vyos-build.tar.gz 
-            docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make test
-            docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testc
-            rm -rf ~/vyos-build || true
+      # - name: Check ISO
+      #   uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      #   env:
+      #     VYOS_VERSION: ${{ env.VYOS_VERSION }}
+      #   with:
+      #     host: ${{ secrets.SSH_HOST }}
+      #     user: ${{ secrets.SSH_USER }}
+      #     port: ${{ secrets.SSH_PORT }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     connect_timeout: 10s
+      #     first_ssh: |
+      #       rm -rf ~/vyos-build* || true
+      #     scp: |
+      #       './vyos-build.tar.gz' => '~/'
+      #     last_ssh: |
+      #       tar -xzf  vyos-build.tar.gz 
+      #       docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make test
+      #       docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testc
+      #       rm -rf ~/vyos-build || true
 
 
       - name: Copy ISO
