@@ -41,9 +41,9 @@ jobs:
       #     echo "TEST" > ./vyos-build/build/live-image-amd64.hybrid.iso
       #####
 
-      - name: Copy ISO
+      - name: Make archive for smoketests
         run: |
-          cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
+          tar -czf vyos-build.tar.gz -C $(pwd) vyos-build
 
       - name: Check ISO
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
@@ -56,16 +56,19 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           connect_timeout: 10s
           first_ssh: |
-            rm -rf ~/vyos-build || true
-            git clone -b current --single-branch https://github.com/vyos/vyos-build
-            mkdir -p ~/vyos-build/build/
+            rm -rf ~/vyos-build* || true
           scp: |
-            './vyos-$VYOS_VERSION-amd64.iso' => ~/vyos-build/build/
+            './vyos-build.tar.gz' => '~/'
           last_ssh: |
-            mv ~/vyos-build/build/vyos-$VYOS_VERSION-amd64.iso ~/vyos-build/build/live-image-amd64.hybrid.iso
+            tar -xzf  vyos-build.tar.gz 
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make test
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testc
             rm -rf ~/vyos-build || true
+
+
+      # - name: Copy ISO
+      #   run: |
+      #     cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
 
       # - name: Sign ISO (Minisign)
       #   run: |
