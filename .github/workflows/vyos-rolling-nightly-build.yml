@@ -23,7 +23,7 @@ jobs:
       - name: Git clone vyos-build
         run: git clone -b current --single-branch https://github.com/vyos/vyos-build
 
-      - name: Build ISO (Smoketest)
+      - name: Build ISO (smoketest)
         run: |
           docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --custom-package vyos-1x-smoketest --version "${VYOS_VERSION}" iso
 
@@ -31,7 +31,7 @@ jobs:
         run: |
           sudo tar -czf vyos-build.tar.gz -C $(pwd) vyos-build
 
-      - name: Check ISO
+      - name: Run smoketests
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         env:
           VYOS_VERSION: ${{ env.VYOS_VERSION }}
