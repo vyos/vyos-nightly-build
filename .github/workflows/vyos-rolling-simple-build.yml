@@ -1,0 +1,56 @@
+name: VyOS rolling simple build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+
+      - name: Set VyOS version
+        id: set_vyos_version
+        run: |
+          echo "VYOS_VERSION=1.4-rolling-$(date -u +%Y%m%d%H%M)" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+
+      - name: Update latest_build.txt
+        run: echo $(date -u +%Y%m%d%H%M) > $GITHUB_WORKSPACE/latest_build.txt
+
+      - name: Create autocommit and tag
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          tagging_message: ${{ env.VYOS_VERSION }}
+          commit_message: ${{ env.VYOS_VERSION }}
+
+      - name: Git clone vyos-build
+        run: git clone -b current --single-branch https://github.com/vyos/vyos-build
+
+      - name: Build ISO
+        run: |
+          docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --version "${VYOS_VERSION}" iso
+
+      - name: Copy ISO
+        run: |
+          cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VYOS_VERSION }}
+          fail_on_unmatched_files: true
+          files: |
+            ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
+            ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+
+      - name: Remove old releases
+        uses: dev-drprasad/delete-older-releases@v0.2.1
+        with:
+          keep_latest: 30
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+
