@@ -16,7 +16,7 @@ jobs:
       - name: Set VyOS version
         id: set_vyos_version
         run: |
-          echo "VYOS_VERSION=1.4-rolling-$(date -u +%Y%m%d%H%M)" >> $GITHUB_ENV
+          echo "VYOS_VERSION=1.5-rolling-$(date -u +%Y%m%d%H%M)" >> $GITHUB_ENV
 
       - uses: actions/checkout@v3
 
