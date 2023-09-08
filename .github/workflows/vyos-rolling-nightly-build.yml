@@ -55,7 +55,8 @@ jobs:
           last_ssh: |
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make test
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testc
-            rm -rf ~/vyos-build || true
+            docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo rm -rf ./*
+            rm -rf ~/vyos-build
 
       - name: Build ISO
         run: |
