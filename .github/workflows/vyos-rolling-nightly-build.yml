@@ -139,7 +139,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "*vyos-rolling-nightly-builds*\nGitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+              "text": "Repository: ${GITHUB_REPOSITORY}\nWorkflow: ${GITHUB_WORKFLOW}\nTrigger: ${GITHUB_EVENT_NAME}\Commit: ${GITHUB_SHA}\nResult: ${{ job.status }}\nURL: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
