@@ -133,9 +133,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
-      - name: Send Slack notification on fail
+      - name: Send Slack notification on workflow failure to Sentrium
         if: failure()
-        id: slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
           payload: |
@@ -144,6 +143,55 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Send Slack notification on smoketests failure to VyOS
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "*VyOS nightly build has failed*",
+              "attachments": [
+                {
+                  "color": "FF0000",
+                  "fields": [
+                    {
+                      "title": "Repository",
+                      "short": true,
+                      "value": "${{ github.repository }}"
+                    },
+                    {
+                      "title": "Workflow",
+                      "short": true,
+                      "value": "${{ github.workflow }}"
+                    },
+                    {
+                      "title": "Trigger",
+                      "short": true,
+                      "value": "${{ github.event_name }}"
+                    },
+                    {
+                      "title": "Commit",
+                      "short": true,
+                      "value": "${{ github.sha }}"
+                    },
+                    {
+                      "title": "Smoketests result",
+                      "short": true,
+                      "value": "${{ steps.smoketests.outcome }}"
+                    },
+                    {
+                      "title": "URL",
+                      "short": false,
+                      "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_FOR_MAINTEINERS }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
   update-downloads-page:
