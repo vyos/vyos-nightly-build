@@ -37,6 +37,7 @@ jobs:
           docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --custom-package vyos-1x-smoketest --version "${VYOS_VERSION}" iso
 
       - name: Run smoketests
+        id: smoketests
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         env:
           VYOS_VERSION: ${{ env.VYOS_VERSION }}
@@ -139,7 +140,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "Repository: ${GITHUB_REPOSITORY}\nWorkflow: ${GITHUB_WORKFLOW}\nTrigger: ${GITHUB_EVENT_NAME}\Commit: ${GITHUB_SHA}\nResult: ${{ job.status }}\nURL: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+              "text": "Repository: *${{ github.repository }}*\nWorkflow: ${{ github.workflow }}\nTrigger: ${{ github.event_name }}\nCommit: ${{ github.sha }}\nWorkflow result: ${{ job.status }}\nSmoketests result: ${{ steps.smoketests.conclusion }}\nURL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
