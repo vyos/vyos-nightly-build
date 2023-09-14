@@ -172,11 +172,6 @@ jobs:
                       "value": "${{ github.event_name }}"
                     },
                     {
-                      "title": "Commit",
-                      "short": true,
-                      "value": "${{ github.sha }}"
-                    },
-                    {
                       "title": "Smoketests result",
                       "short": true,
                       "value": "${{ steps.smoketests.outcome }}"
