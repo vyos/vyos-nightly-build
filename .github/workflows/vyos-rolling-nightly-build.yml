@@ -151,7 +151,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "*VyOS nightly build has failed*",
+              "text": "*VyOS nightly build has been failed*",
               "attachments": [
                 {
                   "color": "FF0000",
