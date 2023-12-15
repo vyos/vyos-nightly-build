@@ -36,6 +36,14 @@ jobs:
         run: |
           docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --custom-package vyos-1x-smoketest --version "${VYOS_VERSION}" iso
 
+      - name: Upload ISO artifact (Smoketests image)
+        uses: actions/upload-artifact@v3
+        with:
+          name: live-image-amd64.hybrid.iso
+          path: ./vyos-build/build/live-image-amd64.hybrid.iso
+          retention-days: 30
+          if-no-files-found: error
+
       - name: Run smoketests
         id: smoketests
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
