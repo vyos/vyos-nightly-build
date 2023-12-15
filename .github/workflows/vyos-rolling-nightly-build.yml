@@ -58,6 +58,7 @@ jobs:
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testc
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo rm -rf ./*
             rm -rf ~/vyos-build
+        timeout-minutes: 300
 
       - name: Build ISO
         run: |
