@@ -46,7 +46,7 @@ jobs:
           user: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
-          connect_timeout: 240s
+          connect_timeout: 999s
           first_ssh: |
             rm -rf vyos-build || true
             git clone -b current --single-branch https://github.com/vyos/vyos-build
