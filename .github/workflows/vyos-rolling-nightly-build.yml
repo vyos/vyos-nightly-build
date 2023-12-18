@@ -39,7 +39,7 @@ jobs:
       - name: Upload ISO artifact (Smoketests image)
         uses: actions/upload-artifact@v3
         with:
-          name: live-image-amd64.hybrid.iso
+          name: vyos-with-smoketests.iso
           path: ./vyos-build/build/live-image-amd64.hybrid.iso
           retention-days: 30
           if-no-files-found: error
