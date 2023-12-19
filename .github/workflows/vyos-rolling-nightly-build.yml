@@ -20,14 +20,6 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: Update latest_build.txt
-        run: echo $(date -u +%Y%m%d%H%M) > $GITHUB_WORKSPACE/latest_build.txt
-
-      - name: Create autocommit and tag
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          tagging_message: ${{ env.VYOS_VERSION }}
-          commit_message: ${{ env.VYOS_VERSION }}
 
       - name: Git clone vyos-build
         run: git clone -b current --single-branch https://github.com/vyos/vyos-build
@@ -124,6 +116,25 @@ jobs:
           path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
           retention-days: 30
           if-no-files-found: error
+
+      - name: create-json
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "version.json"
+          json: |
+            [
+              {
+                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ env.VYOS_VERSION }}/${{ env.VYOS_VERSION }}-amd64.iso",
+                "version": "${{ env.VYOS_VERSION }}"
+              }
+            ]
+
+      - name: Create autocommit and tag
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          tagging_message: ${{ env.VYOS_VERSION }}
+          commit_message: ${{ env.VYOS_VERSION }}
 
       - name: Publish release
         uses: softprops/action-gh-release@v1
