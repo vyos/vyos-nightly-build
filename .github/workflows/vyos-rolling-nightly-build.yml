@@ -125,7 +125,7 @@ jobs:
           json: |
             [
               {
-                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ env.VYOS_VERSION }}/${{ env.VYOS_VERSION }}-amd64.iso",
+                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ env.VYOS_VERSION }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso",
                 "version": "${{ env.VYOS_VERSION }}"
               }
             ]
