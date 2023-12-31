@@ -1,3 +1,4 @@
 *.DS_Store
 vyos-build/
+vyos-1x/
 vyos-*-amd64.iso*
