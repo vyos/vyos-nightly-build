@@ -32,6 +32,11 @@ on:
         required: true
         type: boolean
         default: false
+      SKIP_SLACK_NOTIFICATIONS:
+        description: 'Skip Slack notifications'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   build-iso:
@@ -46,21 +51,21 @@ jobs:
         id: set_env_vars
         run: |
           if [ -z "${{ github.event.inputs.BUILD_BY }}" ]; then
-            echo "BUILD_BY='autobuild@vyos.net'" >> $GITHUB_ENV
+            echo "BUILD_BY=autobuild@vyos.net" >> $GITHUB_ENV
           else
-            echo "BUILD_BY='${{ github.event.inputs.BUILD_BY }}'" >> $GITHUB_ENV
+            echo "BUILD_BY=${{ github.event.inputs.BUILD_BY }}" >> $GITHUB_ENV
           fi
           if [ -z "${{ github.event.inputs.BUILD_VERSION }}" ]; then
-            echo "BUILD_VERSION='1.5-rolling-$(date -u +%Y%m%d%H%M)'" >> $GITHUB_ENV
+            echo "BUILD_VERSION=1.5-rolling-$(date -u +%Y%m%d%H%M)" >> $GITHUB_ENV
           else
-            echo "BUILD_VERSION='${{ github.event.inputs.BUILD_VERSION }}'" >> $GITHUB_ENV
+            echo "BUILD_VERSION=${{ github.event.inputs.BUILD_VERSION }}" >> $GITHUB_ENV
           fi
-          echo "DEBIAN_MIRROR='http://deb.debian.org/debian/'" >> $GITHUB_ENV
-          echo "VYOS_MIRROR='https://rolling-packages.vyos.net/current/'" >> $GITHUB_ENV
+          echo "DEBIAN_MIRROR=http://deb.debian.org/debian/" >> $GITHUB_ENV
+          echo "VYOS_MIRROR=https://rolling-packages.vyos.net/current/" >> $GITHUB_ENV
           if [ -z "${{ github.event.inputs.SKIP_SMOKETEST_RAID1 }}" ]; then
             echo "SMOKETEST_RAID_COMMAND='docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testraid'" >> $GITHUB_ENV
           else
-            echo "SMOKETEST_RAID_COMMAND=''" >> $GITHUB_ENV
+            echo "SMOKETEST_RAID_COMMAND=" >> $GITHUB_ENV
           fi
 
       - uses: actions/checkout@v3
@@ -76,12 +81,12 @@ jobs:
         run: |
           docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image \
           --architecture amd64 \
-          --build-by "$BUILD_BY" \
+          --build-by $BUILD_BY \
           --build-type release \
           --custom-package vyos-1x-smoketest \
-          --debian-mirror "$DEBIAN_MIRROR" \
-          --version "$BUILD_VERSION" \
-          --vyos-mirror "$VYOS_MIRROR" \
+          --debian-mirror $DEBIAN_MIRROR \
+          --version $BUILD_VERSION \
+          --vyos-mirror $VYOS_MIRROR \
           iso
 
       - name: Upload ISO artifact (Smoketest image)
@@ -123,11 +128,11 @@ jobs:
         run: |
           docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image \
           --architecture amd64 \
-          --build-by "$BUILD_BY" \
+          --build-by $BUILD_BY \
           --build-type release \
-          --debian-mirror "$DEBIAN_MIRROR" \
-          --version "$BUILD_VERSION" \
-          --vyos-mirror "$VYOS_MIRROR" \
+          --debian-mirror $DEBIAN_MIRROR \
+          --version $BUILD_VERSION \
+          --vyos-mirror $VYOS_MIRROR \
           iso
 
       - name: Copy ISO
@@ -280,7 +285,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
       - name: Send Slack notification on workflow failure to Sentrium
-        if: failure()
+        if: failure() && ${{ !inputs.SKIP_SLACK_NOTIFICATIONS }}
         uses: slackapi/slack-github-action@v1.24.0
         with:
           payload: |
@@ -292,7 +297,7 @@ jobs:
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
       - name: Send Slack notification on smoketests failure to VyOS
-        if: failure()
+        if: failure() && ${{ !inputs.SKIP_SLACK_NOTIFICATIONS }}
         uses: slackapi/slack-github-action@v1.24.0
         with:
           payload: |
