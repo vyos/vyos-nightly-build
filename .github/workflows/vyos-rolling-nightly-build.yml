@@ -5,18 +5,63 @@ on:
     - cron: "0 0 * * *"
 
   workflow_dispatch:
+    inputs:
+      BUILD_BY:
+        description: 'Builder identifier (if empty autobuild@vyos.net is used)'
+        default: 'autobuild@vyos.net'
+      BUILD_VERSION:
+        description: 'Version number (if empty 1.5-rolling-$(date -u +%Y%m%d%H%M) is used)'
+        default: ''
+      SKIP_SMOKETEST_ALL:
+        description: 'Skip all smoketests'
+        required: true
+        type: boolean
+        default: false
+      SKIP_SMOKETEST_RAID1:
+        description: 'Skip RAID1 smoketest'
+        required: true
+        type: boolean
+        default: false
+      SKIP_SNAPSHOT_UPLOAD:
+        description: 'Skip snapshot upload to S3'
+        required: true
+        type: boolean
+        default: false
+      SKIP_RELEASE_PUBLISHING:
+        description: 'Skip release publishing'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   build-iso:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: main
     steps:
 
-      - name: Set VyOS version
-        id: set_vyos_version
+      - name: Set env variables
+        id: set_env_vars
         run: |
-          echo "VYOS_VERSION=1.5-rolling-$(date -u +%Y%m%d%H%M)" >> $GITHUB_ENV
+          if [ -z "${{ github.event.inputs.BUILD_BY }}" ]; then
+            echo "BUILD_BY='autobuild@vyos.net'" >> $GITHUB_ENV
+          else
+            echo "BUILD_BY='${{ github.event.inputs.BUILD_BY }}'" >> $GITHUB_ENV
+          fi
+          if [ -z "${{ github.event.inputs.BUILD_VERSION }}" ]; then
+            echo "BUILD_VERSION='1.5-rolling-$(date -u +%Y%m%d%H%M)'" >> $GITHUB_ENV
+          else
+            echo "BUILD_VERSION='${{ github.event.inputs.BUILD_VERSION }}'" >> $GITHUB_ENV
+          fi
+          echo "DEBIAN_MIRROR='http://deb.debian.org/debian/'" >> $GITHUB_ENV
+          echo "VYOS_MIRROR='https://rolling-packages.vyos.net/current/'" >> $GITHUB_ENV
+          if [ -z "${{ github.event.inputs.SKIP_SMOKETEST_RAID1 }}" ]; then
+            echo "SMOKETEST_RAID_COMMAND='docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testraid'" >> $GITHUB_ENV
+          else
+            echo "SMOKETEST_RAID_COMMAND=''" >> $GITHUB_ENV
+          fi
 
       - uses: actions/checkout@v3
 
@@ -27,22 +72,33 @@ jobs:
         run: git clone -b current --single-branch https://github.com/vyos/vyos-1x
 
       - name: Build ISO (for Smoketest)
+        if: ${{ !inputs.SKIP_SMOKETEST_ALL }} 
         run: |
-          docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --custom-package vyos-1x-smoketest --version "${VYOS_VERSION}" iso
+          docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image \
+          --architecture amd64 \
+          --build-by "$BUILD_BY" \
+          --build-type release \
+          --custom-package vyos-1x-smoketest \
+          --debian-mirror "$DEBIAN_MIRROR" \
+          --version "$BUILD_VERSION" \
+          --vyos-mirror "$VYOS_MIRROR" \
+          iso
 
       - name: Upload ISO artifact (Smoketest image)
+        if: ${{ !inputs.SKIP_SMOKETEST_ALL }}
         uses: actions/upload-artifact@v3
         with:
-          name: vyos-${{ env.VYOS_VERSION }}-amd64-smoketest.iso
+          name: vyos-${{ env.BUILD_VERSION }}-amd64-smoketest.iso
           path: ./vyos-build/build/live-image-amd64.hybrid.iso
           retention-days: 30
           if-no-files-found: error
 
       - name: Run smoketest
+        if: ${{ !inputs.SKIP_SMOKETEST_ALL }} 
         id: smoketests
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         env:
-          VYOS_VERSION: ${{ env.VYOS_VERSION }}
+          BUILD_VERSION: ${{ env.BUILD_VERSION }}
         with:
           host: ${{ secrets.SSH_HOST }}
           user: ${{ secrets.SSH_USER }}
@@ -56,6 +112,7 @@ jobs:
           scp: |
             './vyos-build/build/live-image-amd64.hybrid.iso' => '~/vyos-build/build/'
           last_ssh: |
+            ${{ env.SMOKETEST_RAID_COMMAND }}
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make test
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testc
             docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo rm -rf ./*
@@ -64,40 +121,49 @@ jobs:
 
       - name: Build ISO
         run: |
-          docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image --architecture amd64 --build-by "autobuild@vyos.net" --vyos-mirror https://rolling-packages.vyos.net/current/ --debian-mirror http://deb.debian.org/debian/ --build-type release --version "${VYOS_VERSION}" iso
+          docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image \
+          --architecture amd64 \
+          --build-by "$BUILD_BY" \
+          --build-type release \
+          --debian-mirror "$DEBIAN_MIRROR" \
+          --version "$BUILD_VERSION" \
+          --vyos-mirror "$VYOS_MIRROR" \
+          iso
 
       - name: Copy ISO
         run: |
-          cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$VYOS_VERSION-amd64.iso
+          cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$BUILD_VERSION-amd64.iso
 
       - name: Sign ISO (Minisign)
         run: |
           echo 'untrusted comment: minisign encrypted secret key' > minisign.key
           echo $minisign_key >> minisign.key
           shasum minisign.key
-          echo $minisign_password | $GITHUB_WORKSPACE/bin/minisign -s minisign.key -Sm ./vyos-$VYOS_VERSION-amd64.iso
-          $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$VYOS_VERSION-amd64.iso -x ./vyos-$VYOS_VERSION-amd64.iso.minisig -p $GITHUB_WORKSPACE/minisign.pub
+          echo $minisign_password | $GITHUB_WORKSPACE/bin/minisign -s minisign.key -Sm ./vyos-$BUILD_VERSION-amd64.iso
+          $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$BUILD_VERSION-amd64.iso -x ./vyos-$BUILD_VERSION-amd64.iso.minisig -p $GITHUB_WORKSPACE/minisign.pub
         env:
           minisign_key: ${{ secrets.minisign_key }}
           minisign_password: ${{ secrets.minisign_password }}
 
       - name: Upload ISO to S3 Glacier
+        if: ${{ !inputs.SKIP_SNAPSHOT_UPLOAD }} 
         uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
-          source: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
-          destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          source: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso
+          destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.BUILD_VERSION }}-amd64.iso
           aws_access_key_id: ${{ secrets.aws_access_key_id }}
           aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
           aws_region: us-east-1
           flags: --storage-class GLACIER
 
       - name: Upload ISO's signature to S3 Glacier
+        if: ${{ !inputs.SKIP_SNAPSHOT_UPLOAD }} 
         uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
-          source: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
-          destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          source: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
+          destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
           aws_access_key_id: ${{ secrets.aws_access_key_id }}
           aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
           aws_region: us-east-1
@@ -106,16 +172,16 @@ jobs:
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v3
         with:
-          name: vyos-${{ env.VYOS_VERSION }}-amd64.iso
-          path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
+          name: vyos-${{ env.BUILD_VERSION }}-amd64.iso
+          path: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso
           retention-days: 30
           if-no-files-found: error
 
       - name: Upload ISO's Minisign artifact
         uses: actions/upload-artifact@v3
         with:
-          name: vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
-          path: ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+          name: vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
+          path: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
           retention-days: 30
           if-no-files-found: error
 
@@ -127,8 +193,8 @@ jobs:
           json: |
             [
               {
-                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ env.VYOS_VERSION }}/vyos-${{ env.VYOS_VERSION }}-amd64.iso",
-                "version": "${{ env.VYOS_VERSION }}"
+                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ env.BUILD_VERSION }}/vyos-${{ env.BUILD_VERSION }}-amd64.iso",
+                "version": "${{ env.BUILD_VERSION }}"
               }
             ]
 
@@ -187,22 +253,25 @@ jobs:
           cat CHANGELOG.md
 
       - name: Create autocommit and tag
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          tagging_message: ${{ env.VYOS_VERSION }}
-          commit_message: ${{ env.VYOS_VERSION }}
+          tagging_message: ${{ env.BUILD_VERSION }}
+          commit_message: ${{ env.BUILD_VERSION }}
 
       - name: Publish release
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
-          tag_name: ${{ env.VYOS_VERSION }}
+          tag_name: ${{ env.BUILD_VERSION }}
           fail_on_unmatched_files: true
           files: |
-            ./vyos-${{ env.VYOS_VERSION }}-amd64.iso
-            ./vyos-${{ env.VYOS_VERSION }}-amd64.iso.minisig
+            ./vyos-${{ env.BUILD_VERSION }}-amd64.iso
+            ./vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
 
       - name: Remove old releases
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         uses: dev-drprasad/delete-older-releases@v0.2.1
         with:
           keep_latest: 30
