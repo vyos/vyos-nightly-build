@@ -45,6 +45,9 @@ jobs:
       contents: write
     concurrency:
       group: main
+    env:
+      DEBIAN_MIRROR: http://deb.debian.org/debian/
+      VYOS_MIRROR: https://rolling-packages.vyos.net/current/
     steps:
 
       - name: Set env variables
@@ -60,8 +63,6 @@ jobs:
           else
             echo "BUILD_VERSION=${{ github.event.inputs.BUILD_VERSION }}" >> $GITHUB_ENV
           fi
-          echo "DEBIAN_MIRROR=http://deb.debian.org/debian/" >> $GITHUB_ENV
-          echo "VYOS_MIRROR=https://rolling-packages.vyos.net/current/" >> $GITHUB_ENV
           if [ -z "${{ github.event.inputs.SKIP_SMOKETEST_RAID1 }}" ]; then
             echo "SMOKETEST_RAID_COMMAND='docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current sudo make testraid'" >> $GITHUB_ENV
           else
