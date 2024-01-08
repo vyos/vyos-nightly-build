@@ -178,10 +178,13 @@ jobs:
 
       - name: write-changelog
         run: |
-          echo -e "## vyos-1x\n" > CHANGELOG.md
-          echo -e "${{ steps.generate-1x-changelog.outputs.changelog || 'No changes' }}\n" >> CHANGELOG.md
-          echo -e "## vyos-build\n" >> CHANGELOG.md
-          echo -e "${{ steps.generate-build-changelog.outputs.changelog || 'No changes' }}" >> CHANGELOG.md
+          cat <<EOF > CHANGELOG.md
+          ## vyos-1x
+          ${{ steps.generate-1x-changelog.outputs.changelog }}
+          ## vyos-build
+          ${{ steps.generate-build-changelog.outputs.changelog }}
+          EOF
+          cat CHANGELOG.md
 
       - name: Create autocommit and tag
         uses: stefanzweifel/git-auto-commit-action@v4
