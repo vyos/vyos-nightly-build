@@ -52,6 +52,8 @@ jobs:
       VYOS_MIRROR: https://rolling-packages.vyos.net/current/
     steps:
 
+      - uses: actions/checkout@v3
+
       - name: Set env variables
         id: set_env_vars
         run: |
@@ -66,8 +68,8 @@ jobs:
           if [ "${{ github.event.inputs.SKIP_SMOKETEST_RAID1 }}" == "true" ]; then
             echo "SMOKETEST_RAID_COMMAND=" >> $GITHUB_ENV
           fi
-
-      - uses: actions/checkout@v3
+          echo "TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_ENV
+          echo "PREVIOUS_SUCCESS_BUILD_TIMESTAMP=$(cat version.json | jq -r '.[0].timestamp')" >> $GITHUB_ENV
 
       - name: Git clone vyos-build
         run: git clone -b current --single-branch https://github.com/vyos/vyos-build
@@ -192,7 +194,8 @@ jobs:
       # If someone pushes commit to this repo while building process the workflow would fall on autocommit step. There is a fix:
       - uses: actions/checkout@v3
 
-      - name: create-json
+      - name: Create version.json
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         id: create-json
         uses: jsdaniell/create-json@v1.2.2
         with:
@@ -201,21 +204,23 @@ jobs:
             [
               {
                 "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ env.BUILD_VERSION }}/vyos-${{ env.BUILD_VERSION }}-amd64.iso",
-                "version": "${{ env.BUILD_VERSION }}"
+                "version": "${{ env.BUILD_VERSION }}",
+                "timestamp": "${{ env.TIMESTAMP }}"
               }
             ]
 
-      - name: last-success-build
+      - name: Retrieve the latest success build for vyos-build and vyos-1x
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         run: |
-          START_TIME=$(gh run list -s success -L 1 -w "VyOS rolling nightly build" --json updatedAt | jq .[0].updatedAt)
           cd ./vyos-build
-          echo "CHANGELOG_COMMIT_build=$(git log --since "$START_TIME" --format="%H" --reverse | head -n1)" >> $GITHUB_ENV
+          echo "CHANGELOG_COMMIT_build=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_ENV
           cd ../vyos-1x
-          echo "CHANGELOG_COMMIT_1x=$(git log --since "$START_TIME" --format="%H" --reverse | head -n1)" >> $GITHUB_ENV
+          echo "CHANGELOG_COMMIT_1x=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_ENV
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: generate-1x-changelog
+      - name: Generate changelog for vyos-1x
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING && env.CHANGELOG_COMMIT_1x != '' }}
         id: generate-1x-changelog
         uses: mikepenz/release-changelog-builder-action@v4.1.0
         with:
@@ -230,9 +235,9 @@ jobs:
               "template": "#{{CHANGELOG}}",
               "pr_template": "- #{{TITLE}}\n   - PR: vyos/vyos-1x##{{NUMBER}}"
             }
-        if: ${{ env.CHANGELOG_COMMIT_1x != '' }}
 
-      - name: generate-build-changelog
+      - name: Generate changelog for vyos-build
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING && env.CHANGELOG_COMMIT_build != '' }} 
         id: generate-build-changelog
         uses: mikepenz/release-changelog-builder-action@v4.1.0
         with:
@@ -247,9 +252,9 @@ jobs:
               "template": "#{{CHANGELOG}}",
               "pr_template": "- #{{TITLE}}\n   - PR: vyos/vyos-build##{{NUMBER}}"
             }
-        if: ${{ env.CHANGELOG_COMMIT_build != '' }}
 
-      - name: write-changelog
+      - name: Generate CHANGELOG.md
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         run: |
           cat <<EOF > CHANGELOG.md
           ## vyos-1x
