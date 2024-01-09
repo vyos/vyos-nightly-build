@@ -54,7 +54,7 @@ jobs:
 
       ### Initialization ###
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set env variables
         id: set_env_vars
@@ -199,8 +199,13 @@ jobs:
           retention-days: 30
           if-no-files-found: error
     
+      - name: Fix files and directories permissions to do checkout
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        run: |
+          sudo chown -R $(whoami):$(whoami) ./*
       # If someone pushes commit to this repo while building process the workflow would fall on autocommit step. There is a fix:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
 
       ### Release publishing ###
 
