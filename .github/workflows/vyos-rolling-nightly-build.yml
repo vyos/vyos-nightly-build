@@ -52,6 +52,8 @@ jobs:
       VYOS_MIRROR: https://rolling-packages.vyos.net/current/
     steps:
 
+      ### Initialization ###
+
       - uses: actions/checkout@v3
 
       - name: Set env variables
@@ -76,6 +78,8 @@ jobs:
 
       - name: Git clone vyos-1x
         run: git clone -b current --single-branch https://github.com/vyos/vyos-1x
+
+        ### Smoketest ###
 
       - name: Build ISO (for Smoketest)
         if: ${{ !inputs.SKIP_SMOKETEST_ALL }} 
@@ -125,6 +129,8 @@ jobs:
             rm -rf ~/vyos-build
         timeout-minutes: 300
 
+      ### Building ISO ###
+
       - name: Build ISO
         run: |
           docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current sudo --preserve-env ./build-vyos-image \
@@ -150,6 +156,8 @@ jobs:
         env:
           minisign_key: ${{ secrets.minisign_key }}
           minisign_password: ${{ secrets.minisign_password }}
+
+      ### Uploading artifacts ###
 
       - name: Upload ISO to S3 Glacier
         if: ${{ !inputs.SKIP_SNAPSHOT_UPLOAD }} 
@@ -193,6 +201,8 @@ jobs:
     
       # If someone pushes commit to this repo while building process the workflow would fall on autocommit step. There is a fix:
       - uses: actions/checkout@v3
+
+      ### Release publishing ###
 
       - name: Create version.json
         if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
@@ -291,6 +301,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
+     ### Slack notification ###
+        
       - name: Send Slack notification on workflow failure to Sentrium
         if: failure() && !inputs.SKIP_SLACK_NOTIFICATIONS
         uses: slackapi/slack-github-action@v1.24.0
