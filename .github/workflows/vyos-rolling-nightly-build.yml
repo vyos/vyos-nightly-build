@@ -190,6 +190,9 @@ jobs:
           path: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
           retention-days: 30
           if-no-files-found: error
+    
+      # If someone pushes commit to this repo while building process the workflow would fall on autocommit step. There is a fix:
+      - uses: actions/checkout@v3
 
       - name: create-json
         id: create-json
