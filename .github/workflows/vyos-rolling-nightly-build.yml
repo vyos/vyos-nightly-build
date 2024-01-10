@@ -77,6 +77,7 @@ jobs:
         run: git clone -b current --single-branch https://github.com/vyos/vyos-build
 
       - name: Git clone vyos-1x
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         run: git clone -b current --single-branch https://github.com/vyos/vyos-1x
 
         ### Smoketest ###
@@ -198,31 +199,8 @@ jobs:
           path: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
           retention-days: 30
           if-no-files-found: error
-    
-      - name: Fix files and directories permissions to do checkout
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
-        run: |
-          sudo chown -R $(whoami):$(whoami) ./*
-      # If someone pushes commit to this repo while building process the workflow would fall on autocommit step. There is a fix:
-      - uses: actions/checkout@v4
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
 
       ### Release publishing ###
-
-      - name: Create version.json
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
-        id: create-json
-        uses: jsdaniell/create-json@v1.2.2
-        with:
-          name: "version.json"
-          json: |
-            [
-              {
-                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ env.BUILD_VERSION }}/vyos-${{ env.BUILD_VERSION }}-amd64.iso",
-                "version": "${{ env.BUILD_VERSION }}",
-                "timestamp": "${{ env.TIMESTAMP }}"
-              }
-            ]
 
       - name: Retrieve the latest success build for vyos-build and vyos-1x
         if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
@@ -268,6 +246,14 @@ jobs:
               "pr_template": "- #{{TITLE}}\n   - PR: vyos/vyos-build##{{NUMBER}}"
             }
 
+      - name: Fix files and directories permissions to do checkout
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        run: |
+          sudo chown -R $(whoami):$(whoami) ./*
+        
+      - uses: actions/checkout@v4 # If someone pushes commit to this repo while building process the workflow would fall on autocommit step. There is a fix.
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+
       - name: Generate CHANGELOG.md
         if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         run: |
@@ -278,6 +264,21 @@ jobs:
           ${{ steps.generate-build-changelog.outputs.changelog }}
           EOF
           cat CHANGELOG.md
+
+      - name: Create version.json
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        id: create-json
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "version.json"
+          json: |
+            [
+              {
+                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ env.BUILD_VERSION }}/vyos-${{ env.BUILD_VERSION }}-amd64.iso",
+                "version": "${{ env.BUILD_VERSION }}",
+                "timestamp": "${{ env.TIMESTAMP }}"
+              }
+            ]
 
       - name: Create autocommit and tag
         if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
