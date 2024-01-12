@@ -272,6 +272,13 @@ jobs:
               }
             ]
 
+
+      - name: Check if the repository was modified during runtime to prevent autocommit failure
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        run: |
+          sudo chown -R $(whoami):$(whoami) ./*
+          git pull --autostash --rebase
+    
       - name: Create autocommit and tag
         if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         uses: stefanzweifel/git-auto-commit-action@v4
