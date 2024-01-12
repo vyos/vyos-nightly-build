@@ -246,14 +246,6 @@ jobs:
               "pr_template": "- #{{TITLE}}\n   - PR: vyos/vyos-build##{{NUMBER}}"
             }
 
-      - name: Fix files and directories permissions to do checkout
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
-        run: |
-          sudo chown -R $(whoami):$(whoami) ./*
-        
-      - uses: actions/checkout@v4 # If someone pushes commit to this repo while building process the workflow would fall on autocommit step. There is a fix.
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
-
       - name: Generate CHANGELOG.md
         if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         run: |
