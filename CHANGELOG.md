@@ -9,6 +9,8 @@
    - PR: vyos/vyos-1x#2812
 - T5925: Containers change systemd KillMode
    - PR: vyos/vyos-1x#2814
+- dhcpv6: T3316: Extend scope of DHCP options, bugfixes
+   - PR: vyos/vyos-1x#2817
 
 
 ## vyos-build
