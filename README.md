@@ -1,3 +1,4 @@
+![example workflow](https://github.com/vyos/vyos-rolling-nightly-builds/actions/workflows/vyos-rolling-nightly-build.yml/badge.svg)
 # vyos-rolling-nightly-builds
 Scheduled ISO nightly builds for current branch 
 
