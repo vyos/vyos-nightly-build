@@ -7,10 +7,18 @@
    - PR: vyos/vyos-1x#2968
 - rpki: T6023: add support for CLI knobs expire-interval and retry-interval
    - PR: vyos/vyos-1x#2955
+- https: T5902: fix migration of virtual-host port
+   - PR: vyos/vyos-1x#2975
+- T5703: Fix reapply QoS for connection-oriented interfaces
+   - PR: vyos/vyos-1x#2967
+- T6028: Fix QoS policy shaper wrong class_id_max and default_minor_id
+   - PR: vyos/vyos-1x#2978
 
 
 ## vyos-build
-- frr: T6023: add pending upstream patches
-   - PR: vyos/vyos-build#497
+- T5121: Fix, make architecture and build-type loaded from build flavor and cli arguments
+   - PR: vyos/vyos-build#327
+- frr: T5788: update to 9.1 release
+   - PR: vyos/vyos-build#499
 
 
