@@ -1,6 +1,4 @@
 ## vyos-1x
-- T6019: fix smoketest after upgrading nftables and libnftnl packages.
-   - PR: vyos/vyos-1x#2991
 - init: T2044: fix "binary operator expected" when two or more RPKI caches are defined
    - PR: vyos/vyos-1x#2994
 - ipsec: T5981: Strip '@' from migrated peer PKI name
@@ -19,10 +17,16 @@
    - PR: vyos/vyos-1x#2998
 - T6019: Fix smoketest test_system_conntrack custom timeout
    - PR: vyos/vyos-1x#3005
+- T6029: Rewritten Accel-PPP services to an identical feature set
+   - PR: vyos/vyos-1x#3004
+- rpki: T6034: extend config migration testcase
+   - PR: vyos/vyos-1x#3011
+- dhcpv6-server: T5993: Extend interface migrator to check VLAN/QinQ
+   - PR: vyos/vyos-1x#3012
 
 
 ## vyos-build
-- T6009-6019: fix hour decoding when timezone offset is negative; bump libnftnl and nftables version.
-   - PR: vyos/vyos-build#501
+- isc-dhcp: T5965: add custom package build with dhclient patches for WWAN
+   - PR: vyos/vyos-build#503
 
 
