@@ -1,13 +1,11 @@
 ## vyos-1x
-- T6029: Rewritten Accel-PPP services to an identical feature set
-   - PR: vyos/vyos-1x#3004
-- rpki: T6034: extend config migration testcase
-   - PR: vyos/vyos-1x#3011
-- dhcpv6-server: T5993: Extend interface migrator to check VLAN/QinQ
-   - PR: vyos/vyos-1x#3012
-- T6001: add option to disable next-hop-tracking resolve-via-default
-   - PR: vyos/vyos-1x#3016
+- login: T5972: add possibility to disable individual local user accounts
+   - PR: vyos/vyos-1x#3019
+- image-tools: T6041: fix logic of is_live_boot to allow for PXE boot
+   - PR: vyos/vyos-1x#3024
+- op-mode: T5581: add "show ipv6 nht" command
+   - PR: vyos/vyos-1x#3027
 
 
 ## vyos-build
-
+- no changes
