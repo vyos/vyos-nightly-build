@@ -222,22 +222,22 @@ jobs:
         if: ${{ !inputs.FAKE_BUILDING_PROCESS }} 
         id: copy_iso
         run: |
-          cp ./vyos-build/build/live-image-amd64.hybrid.iso /tmp/vyos-$BUILD_VERSION-amd64.iso
+          cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$BUILD_VERSION-amd64.iso
 
       - name: "Building: fake an ISO image"
         if: ${{ inputs.FAKE_BUILDING_PROCESS }} 
         id: fake_iso
         run: |
-          echo FAKE > /tmp/vyos-$BUILD_VERSION-amd64.iso
+          echo FAKE > ./vyos-$BUILD_VERSION-amd64.iso
 
       - name: "Building: sign an ISO image with Minisign"
         id: sign_iso_minisign
         run: |
           echo "${{ secrets.minisign_private_key }}" > /tmp/minisign.key
           shasum /tmp/minisign.key
-          echo ${{ secrets.minisign_password }} | $GITHUB_WORKSPACE/bin/minisign -s /tmp/minisign.key -Sm /tmp/vyos-$BUILD_VERSION-amd64.iso
+          echo ${{ secrets.minisign_password }} | $GITHUB_WORKSPACE/bin/minisign -s /tmp/minisign.key -Sm ./vyos-$BUILD_VERSION-amd64.iso
           echo "${{ secrets.minisign_public_key }}" > /tmp/minisign.pub
-          $GITHUB_WORKSPACE/bin/minisign -Vm /tmp/vyos-$BUILD_VERSION-amd64.iso -x /tmp/vyos-$BUILD_VERSION-amd64.iso.minisig -p /tmp/minisign.pub
+          $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$BUILD_VERSION-amd64.iso -x ./vyos-$BUILD_VERSION-amd64.iso.minisig -p /tmp/minisign.pub
           rm /tmp/minisign.key /tmp/minisign.pub 
 
 ### Uploading artifacts ###
@@ -248,7 +248,7 @@ jobs:
         uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
-          source: /tmp/vyos-${{ env.BUILD_VERSION }}-amd64.iso
+          source: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso
           destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.BUILD_VERSION }}-amd64.iso
           aws_access_key_id: ${{ secrets.aws_access_key_id }}
           aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
@@ -261,7 +261,7 @@ jobs:
         uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
-          source: /tmp/vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
+          source: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
           destination: s3://${{ secrets.aws_s3_bucket }}/vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
           aws_access_key_id: ${{ secrets.aws_access_key_id }}
           aws_secret_access_key: ${{ secrets.aws_secret_access_key }}
@@ -273,7 +273,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vyos-${{ env.BUILD_VERSION }}-amd64.iso
-          path: /tmp/vyos-${{ env.BUILD_VERSION }}-amd64.iso
+          path: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso
           retention-days: 30
           if-no-files-found: error
 
@@ -282,7 +282,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
-          path: /tmp/vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
+          path: ./vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
           retention-days: 30
           if-no-files-found: error
 
@@ -390,8 +390,8 @@ jobs:
           tag_name: ${{ env.BUILD_VERSION }}
           fail_on_unmatched_files: true
           files: |
-            /tmp/vyos-${{ env.BUILD_VERSION }}-amd64.iso
-            /tmp/vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
+            ./vyos-${{ env.BUILD_VERSION }}-amd64.iso
+            ./vyos-${{ env.BUILD_VERSION }}-amd64.iso.minisig
 
       - name: "Release publishing: remove old releases"
         id: remove_old_releases
