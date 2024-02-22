@@ -361,6 +361,7 @@ jobs:
             ]
 
       - name: "Release publishing: update Minisign public key"
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
         id: update_minisign_public_key
         run: |
           echo "${{ secrets.minisign_public_key }}" > minisign.pub
