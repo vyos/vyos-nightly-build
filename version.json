@@ -1,7 +1,7 @@
 [
   {
-    "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/20240229-new-github-token/vyos-20240229-new-github-token-amd64.iso",
-    "version": "20240229-new-github-token",
-    "timestamp": "2024-02-29T09:04:27Z"
+    "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/1.5-rolling-202402291036/vyos-1.5-rolling-202402291036-amd64.iso",
+    "version": "1.5-rolling-202402291036",
+    "timestamp": "2024-02-29T10:36:54Z"
   }
 ]
