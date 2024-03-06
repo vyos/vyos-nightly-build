@@ -1,14 +1,10 @@
 ## vyos-1x
-- T6086: NAT: fix nat rules when using source-groups and translation address is a network.
-   - PR: vyos/vyos-1x#3080
-- vyos.ethtool: T6083: use JSON input data #2
-   - PR: vyos/vyos-1x#3077
-- ospfv3: T6087: add support to redistribute IS-IS routes
-   - PR: vyos/vyos-1x#3078
-- T6084: Add NHRP dependency for IPsec and fix NHRP empty config bug
-   - PR: vyos/vyos-1x#3079
-- qos: T5646: Skip add filter for qos policy limiter class without match
-   - PR: vyos/vyos-1x#3068
+- xml: T5738: use generic-disable-node building block for "disable" CLI nodes
+   - PR: vyos/vyos-1x#3091
+- T2447: add configurable kernel boot option 'disable-power-saving'
+   - PR: vyos/vyos-1x#3093
+- http-api: T6069: fix allocation outside of thread lock
+   - PR: vyos/vyos-1x#3089
 
 
 ## vyos-build
