@@ -1,10 +1,10 @@
 ## vyos-1x
-- xml: T5738: use generic-disable-node building block for "disable" CLI nodes
-   - PR: vyos/vyos-1x#3091
-- T2447: add configurable kernel boot option 'disable-power-saving'
-   - PR: vyos/vyos-1x#3093
-- http-api: T6069: fix allocation outside of thread lock
-   - PR: vyos/vyos-1x#3089
+- T6096: Config commits are not synced properly because 00vyos-sync is deleted by vyos-router
+   - PR: vyos/vyos-1x#3085
+- wifi: T6095: incorrect country "uk" it's actually "gb"
+   - PR: vyos/vyos-1x#3090
+- T6075: firewall and NAT: check if interface-group exists when using them in firewall|nat rules.
+   - PR: vyos/vyos-1x#3088
 
 
 ## vyos-build
