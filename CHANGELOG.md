@@ -1,10 +1,8 @@
 ## vyos-1x
-- T6096: Config commits are not synced properly because 00vyos-sync is deleted by vyos-router
-   - PR: vyos/vyos-1x#3085
-- wifi: T6095: incorrect country "uk" it's actually "gb"
-   - PR: vyos/vyos-1x#3090
-- T6075: firewall and NAT: check if interface-group exists when using them in firewall|nat rules.
-   - PR: vyos/vyos-1x#3088
+- conntrack-sync: T6057: Add ability to disable syslog for conntrackd
+   - PR: vyos/vyos-1x#3099
+- remote: T6104: fix logic of failure case in MissingHostKeyPolicy
+   - PR: vyos/vyos-1x#3100
 
 
 ## vyos-build
