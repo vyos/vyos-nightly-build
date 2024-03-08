@@ -1,8 +1,10 @@
 ## vyos-1x
-- conntrack-sync: T6057: Add ability to disable syslog for conntrackd
-   - PR: vyos/vyos-1x#3099
-- remote: T6104: fix logic of failure case in MissingHostKeyPolicy
-   - PR: vyos/vyos-1x#3100
+- snmp: T2998: SNMP v3 oid "exclude" option fix
+   - PR: vyos/vyos-1x#3105
+- vrrp: T6020: vrrp health-check script not applied correctly
+   - PR: vyos/vyos-1x#2966
+- http-api: T6107: add an option to increase the request body size limit
+   - PR: vyos/vyos-1x#3108
 
 
 ## vyos-build
