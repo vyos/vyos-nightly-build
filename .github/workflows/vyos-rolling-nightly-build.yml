@@ -66,6 +66,7 @@ jobs:
       VYOS_MIRROR: https://rolling-packages.vyos.net/current/
       DOCKER_CALL: docker run --rm --privileged -v ./vyos-build/:/vyos -w /vyos vyos/vyos-build:current
       DOCKER_CALL_ON_KVM_HOST: docker run --rm --privileged -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current
+      DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL: docker run --rm --privileged --pull=always -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current
     steps:
 
 ### Initialization ###
@@ -154,7 +155,7 @@ jobs:
           timeout: 15m
           command_timeout: 180m
           script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST }} \
+            ${{ env.DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL }} \
             sudo scripts/check-qemu-install --logfile smoketest_raid.log --debug --configd --raid --configtest build/live-image-amd64.hybrid.iso
 
       - name: "Smoketest: system"
