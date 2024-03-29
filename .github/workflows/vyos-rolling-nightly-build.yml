@@ -489,6 +489,7 @@ jobs:
         with:
           slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          file_type: 'text'
           file_path: ${{ github.workspace }}/smoketest_filtered.log
           initial_comment: Smoketest log excerpt
           if_no_files_found: ignore
