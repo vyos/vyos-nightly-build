@@ -1,6 +1,8 @@
 ## vyos-1x
-- T6246: improve haproxy http check configuration
-   - PR: vyos/vyos-1x#3338
+- vyos.utils: T6244: add whitespace after time unit in uptime
+   - PR: vyos/vyos-1x#3336
+- xml: T5738: fix typo in radius-additions.xml.i
+   - PR: vyos/vyos-1x#3339
 
 
 ## vyos-build
