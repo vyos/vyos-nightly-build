@@ -500,6 +500,8 @@ jobs:
     if: ${{ !inputs.SKIP_DOWNLOADS_PAGE_UPDATE }}
     needs: build-iso
     uses: vyos/community.vyos.net/.github/workflows/main.yml@production
+    with:
+      branch: production
     secrets:
         NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
         GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
