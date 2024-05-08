@@ -1,10 +1,16 @@
 ## vyos-1x
-- T6298: Fix TPM incorrect path for rc_cmd
-   - PR: vyos/vyos-1x#3411
-- T6307: Add dependency procps to build vyos-1x
-   - PR: vyos/vyos-1x#3412
-- vyos.template: T3664: use a module-level global variable for the default template directory
-   - PR: vyos/vyos-1x#3415
+- T10000: added codeql caller workflow
+   - PR: vyos/vyos-1x#3418
+- feat: added codeql caller workflow - workflow dispatch
+   - PR: vyos/vyos-1x#3419
+- T6305: accept ipoe interfaces on firewall ruleset
+   - PR: vyos/vyos-1x#3424
+- op-mode: T6284: IPoE-server op-mode does not show IPv6 address field
+   - PR: vyos/vyos-1x#3423
+- bgp: T6082: Allow the same local-as and remote-as in one peer group
+   - PR: vyos/vyos-1x#3422
+- T6310: added codeql workflow
+   - PR: vyos/vyos-1x#3421
 
 
 ## vyos-build
