@@ -1,10 +1,6 @@
 ## vyos-1x
-- image-tools: T6176: addendum to fixes for boot console
-   - PR: vyos/vyos-1x#3445
-- T6329: firewall: add a patch for op-mode command <show firewall group>
-   - PR: vyos/vyos-1x#3442
-- ethernet: T6306: add support for EVPN MH uplink/core tracking
-   - PR: vyos/vyos-1x#3447
+- T6251: Extend table number limits for policy route-map set table
+   - PR: vyos/vyos-1x#3451
 
 
 ## vyos-build
