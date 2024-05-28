@@ -98,7 +98,7 @@ jobs:
 
 ### Smoketest ###
 
-      - name: "Smoketest: build ISO image"
+      - name: "Smoketest: build generic ISO image"
         id: build_iso_for_smoketest
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }} 
         run: |
@@ -111,9 +111,9 @@ jobs:
           --debian-mirror $DEBIAN_MIRROR \
           --version $BUILD_VERSION \
           --vyos-mirror $VYOS_MIRROR \
-          iso
+          generic
 
-      - name: "Smoketest: create ISO artifact"
+      - name: "Smoketest: create generic ISO artifact"
         id: upload_iso_artifact_smoketest_image
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }} 
         uses: actions/upload-artifact@v4
@@ -123,7 +123,7 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-      - name: "Smoketest: upload ISO to KVM host"
+      - name: "Smoketest: upload generic ISO to KVM host"
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }} 
         id: copy_smoketest_iso_to_kvm_host
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
@@ -217,15 +217,15 @@ jobs:
           --debian-mirror $DEBIAN_MIRROR \
           --version $BUILD_VERSION \
           --vyos-mirror $VYOS_MIRROR \
-          iso
+          generic
 
-      - name: "Building: copy an ISO image"
+      - name: "Building: copy a generic ISO image"
         if: ${{ !inputs.FAKE_BUILDING_PROCESS }} 
         id: copy_iso
         run: |
           cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$BUILD_VERSION-amd64.iso
 
-      - name: "Building: fake an ISO image"
+      - name: "Building: fake a generic ISO image"
         if: ${{ inputs.FAKE_BUILDING_PROCESS }} 
         id: fake_iso
         run: |
