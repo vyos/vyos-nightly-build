@@ -1,6 +1,6 @@
 ## vyos-1x
-- op-mode: T6377: must call pki.py helper as root to work with ACME certificates
-   - PR: vyos/vyos-1x#3517
+- smoketest: T6395: check for VFIO options to be present
+   - PR: vyos/vyos-1x#3522
 
 
 ## vyos-build
