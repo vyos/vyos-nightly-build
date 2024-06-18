@@ -93,14 +93,14 @@ jobs:
 
       - name: "Initialization: git clone vyos-1x"
         id: git_clone_vyos-1x
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         run: git clone -b current --single-branch https://github.com/vyos/vyos-1x
 
 ### Smoketest ###
 
       - name: "Smoketest: build generic ISO image"
         id: build_iso_for_smoketest
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }}
         run: |
           ${{ env.DOCKER_CALL }} \
           sudo --preserve-env ./build-vyos-image \
@@ -115,7 +115,7 @@ jobs:
 
       - name: "Smoketest: create generic ISO artifact"
         id: upload_iso_artifact_smoketest_image
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }}
         uses: actions/upload-artifact@v4
         with:
           name: vyos-${{ env.BUILD_VERSION }}-amd64-smoketest.iso
@@ -124,7 +124,7 @@ jobs:
           if-no-files-found: error
 
       - name: "Smoketest: upload generic ISO to KVM host"
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }}
         id: copy_smoketest_iso_to_kvm_host
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         env:
@@ -144,7 +144,7 @@ jobs:
         timeout-minutes: 300
 
       - name: "Smoketest: RAID"
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_RAID1 }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_RAID1 }}
         id: smoketest_raid
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -159,7 +159,7 @@ jobs:
             sudo scripts/check-qemu-install --logfile smoketest_raid.log --debug --configd --raid --configtest build/live-image-amd64.hybrid.iso
 
       - name: "Smoketest: system"
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_SYSTEM }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_SYSTEM }}
         id: smoketest_system
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -174,7 +174,7 @@ jobs:
             sudo scripts/check-qemu-install --logfile smoketest_system.log --debug --match="$(MATCH)" --uefi build/live-image-amd64.hybrid.iso
   
       - name: "Smoketest: configuration"
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_CONFIG }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_CONFIG }}
         id: smoketest_configuration
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -189,7 +189,7 @@ jobs:
             sudo scripts/check-qemu-install --logfile smoketest_configuration.log --debug --configd --configtest build/live-image-amd64.hybrid.iso 
         
       - name: "Smoketest: clear files"
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }}
         id: clear_smoketest_files
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -206,7 +206,7 @@ jobs:
 ### Building ###
 
       - name: "Building: create ISO image"
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS }}
         id: build_iso
         run: |
           ${{ env.DOCKER_CALL }} \
@@ -220,13 +220,13 @@ jobs:
           generic
 
       - name: "Building: copy a generic ISO image"
-        if: ${{ !inputs.FAKE_BUILDING_PROCESS }} 
+        if: ${{ !inputs.FAKE_BUILDING_PROCESS }}
         id: copy_iso
         run: |
           cp ./vyos-build/build/live-image-amd64.hybrid.iso ./vyos-$BUILD_VERSION-amd64.iso
 
       - name: "Building: fake a generic ISO image"
-        if: ${{ inputs.FAKE_BUILDING_PROCESS }} 
+        if: ${{ inputs.FAKE_BUILDING_PROCESS }}
         id: fake_iso
         run: |
           echo FAKE > ./vyos-$BUILD_VERSION-amd64.iso
@@ -239,13 +239,13 @@ jobs:
           echo ${{ secrets.minisign_password }} | $GITHUB_WORKSPACE/bin/minisign -s /tmp/minisign.key -Sm ./vyos-$BUILD_VERSION-amd64.iso
           echo "${{ secrets.minisign_public_key }}" > /tmp/minisign.pub
           $GITHUB_WORKSPACE/bin/minisign -Vm ./vyos-$BUILD_VERSION-amd64.iso -x ./vyos-$BUILD_VERSION-amd64.iso.minisig -p /tmp/minisign.pub
-          rm /tmp/minisign.key /tmp/minisign.pub 
+          rm /tmp/minisign.key /tmp/minisign.pub
 
 ### Uploading artifacts ###
 
       - name: "Uploading artifacts: ISO image to S3 Glacier"
         id: upload_iso_to_s3_glacier
-        if: ${{ !inputs.SKIP_SNAPSHOT_S3_UPLOAD }} 
+        if: ${{ !inputs.SKIP_SNAPSHOT_S3_UPLOAD }}
         uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
@@ -258,7 +258,7 @@ jobs:
 
       - name: "Uploading artifacts: ISO image's signature to S3 Glacier"
         id: upload_iso_signature_to_s3_glacier
-        if: ${{ !inputs.SKIP_SNAPSHOT_S3_UPLOAD }} 
+        if: ${{ !inputs.SKIP_SNAPSHOT_S3_UPLOAD }}
         uses: keithweaver/aws-s3-github-action@v1.0.0
         with:
           command: cp
@@ -291,7 +291,7 @@ jobs:
 
       - name: "Release publishing: retrieve the latest success build for vyos-build and vyos-1x"
         id: retrieve_the_latest_success_build_for_vyos-build_vyos-1x
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         run: |
           cd ./vyos-build
           echo "CHANGELOG_COMMIT_build=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_ENV
@@ -318,7 +318,7 @@ jobs:
             }
 
       - name: "Release publishing: generate changelog for vyos-build"
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING && env.CHANGELOG_COMMIT_build }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING && env.CHANGELOG_COMMIT_build }}
         id: generate_changelog_for_vyos-build
         uses: mikepenz/release-changelog-builder-action@v4.1.0
         with:
@@ -336,7 +336,7 @@ jobs:
 
       - name: "Release publishing: generate CHANGELOG.md"
         id: generate_changelog_md
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         run: |
           cat <<EOF > CHANGELOG.md
           ## vyos-1x
@@ -347,7 +347,7 @@ jobs:
           cat CHANGELOG.md
 
       - name: "Release publishing: create version.json"
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         id: create_version_json
         uses: jsdaniell/create-json@v1.2.3
         with:
@@ -362,21 +362,21 @@ jobs:
             ]
 
       - name: "Release publishing: update Minisign public key"
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         id: update_minisign_public_key
         run: |
           echo "${{ secrets.minisign_public_key }}" > minisign.pub
 
       - name: "Release publishing: check if the repository was modified during runtime to prevent autocommit failure"
         id: check_if_the_repository_was_modified_during_runtime
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         run: |
           sudo chown -R $(whoami):$(whoami) ./*
           git pull --autostash --rebase
-    
+
       - name: "Release publishing: create autocommit and tag"
         id: create_autocommit_and_tag
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           tagging_message: ${{ env.BUILD_VERSION }}
@@ -384,7 +384,7 @@ jobs:
 
       - name: "Release publishing: publish release"
         id: publish_release
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
@@ -396,7 +396,7 @@ jobs:
 
       - name: "Release publishing: remove old releases"
         id: remove_old_releases
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }} 
+        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         uses: dev-drprasad/delete-older-releases@v0.3.2
         with:
           keep_latest: 30
