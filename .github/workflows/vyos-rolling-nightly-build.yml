@@ -155,8 +155,7 @@ jobs:
           timeout: 15m
           command_timeout: 180m
           script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL }} \
-            sudo scripts/check-qemu-install --logfile smoketest_raid.log --debug --configd --raid --configtest build/live-image-amd64.hybrid.iso
+            ${{ env.DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL }} sudo make testraid
 
       - name: "Smoketest: system"
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_SYSTEM }}
@@ -170,9 +169,8 @@ jobs:
           timeout: 15m
           command_timeout: 180m
           script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST }} \
-            sudo scripts/check-qemu-install --logfile smoketest_system.log --debug --match="$(MATCH)" --uefi build/live-image-amd64.hybrid.iso
-  
+            ${{ env.DOCKER_CALL_ON_KVM_HOST }} sudo make test
+
       - name: "Smoketest: configuration"
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_CONFIG }}
         id: smoketest_configuration
@@ -185,9 +183,8 @@ jobs:
           timeout: 15m
           command_timeout: 180m
           script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST }} \
-            sudo scripts/check-qemu-install --logfile smoketest_configuration.log --debug --configd --configtest build/live-image-amd64.hybrid.iso 
-        
+            ${{ env.DOCKER_CALL_ON_KVM_HOST }} sudo make testc
+
       - name: "Smoketest: clear files"
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }}
         id: clear_smoketest_files
