@@ -1,8 +1,10 @@
 ## vyos-1x
-- T3900: extend latest fix for firewall raw implementation to ipv6.
-   - PR: vyos/vyos-1x#3722
-- GitHub: T6494: extend ISO integration workflow
-   - PR: vyos/vyos-1x#3714
+- interfaces: T6519: harden config migration if ethernet interface is missing
+   - PR: vyos/vyos-1x#3724
+- T6520: added PR write permissions for smoke test workflow
+   - PR: vyos/vyos-1x#3728
+- T6510: smoketest: generell improvement task for the smoketesting platform
+   - PR: vyos/vyos-1x#3727
 
 
 ## vyos-build
