@@ -1,14 +1,14 @@
 ## vyos-1x
-- op-mode: T6498: add machine-readable tech support report script
-   - PR: vyos/vyos-1x#3746
-- T6536: nat: add migration script that replaces wildcard charater
-   - PR: vyos/vyos-1x#3749
-- syslog: T5366: remove reference to deprecated sysvinit rsyslog script
-   - PR: vyos/vyos-1x#3760
-- T6546: unused import check permission update
-   - PR: vyos/vyos-1x#3769
-- op-mode: T6537: include hostname in the reboot/shutdown warning message
-   - PR: vyos/vyos-1x#3767
+- vyos_net_name: T6544: Updated the  script
+   - PR: vyos/vyos-1x#3776
+- op-mode: T6371: fix output of NAT rules with single port range
+   - PR: vyos/vyos-1x#3778
+- T6539: add logging options to load-balancer reverse-proxy
+   - PR: vyos/vyos-1x#3753
+- wireless: T4287: use upstream regulatory database due to kernel signing
+   - PR: vyos/vyos-1x#3777
+- wireless: T4287: use Debian postinst over preinst when using update-alternatives
+   - PR: vyos/vyos-1x#3782
 
 
 ## vyos-build
