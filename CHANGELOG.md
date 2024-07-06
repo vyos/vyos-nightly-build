@@ -1,14 +1,18 @@
 ## vyos-1x
-- vyos_net_name: T6544: Updated the  script
-   - PR: vyos/vyos-1x#3776
-- op-mode: T6371: fix output of NAT rules with single port range
-   - PR: vyos/vyos-1x#3778
-- T6539: add logging options to load-balancer reverse-proxy
-   - PR: vyos/vyos-1x#3753
-- wireless: T4287: use upstream regulatory database due to kernel signing
-   - PR: vyos/vyos-1x#3777
-- wireless: T4287: use Debian postinst over preinst when using update-alternatives
-   - PR: vyos/vyos-1x#3782
+- migration: T6007: add missing check for None in utility function
+   - PR: vyos/vyos-1x#3788
+- T6556: workflow trigger branches cleanup
+   - PR: vyos/vyos-1x#3784
+- T6496: Added support for WPA-Enterprise client-mode
+   - PR: vyos/vyos-1x#3711
+- T6556: pull_request_target update in unused import
+   - PR: vyos/vyos-1x#3792
+- GitHub: T6494: do not use 0/null value to mark build succeed
+   - PR: vyos/vyos-1x#3789
+- smoketest: T6539: remove explicit test for non existing global log entry
+   - PR: vyos/vyos-1x#3790
+- op-mode: T6537: remove unused cmd imported from vyos.utils.process
+   - PR: vyos/vyos-1x#3791
 
 
 ## vyos-build
