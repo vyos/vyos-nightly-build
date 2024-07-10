@@ -155,7 +155,7 @@ jobs:
           timeout: 15m
           command_timeout: 180m
           script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL }} /bin/bash -c "sudo make testraid | tee smoketest_raid.log"
+            ${{ env.DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL }} /bin/bash -c "set -o pipefail && sudo make testraid | tee smoketest_raid.log"
 
       - name: "Smoketest: system"
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_SYSTEM }}
@@ -169,7 +169,7 @@ jobs:
           timeout: 15m
           command_timeout: 180m
           script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST }} /bin/bash -c "sudo make test | tee smoketest_system.log"
+            ${{ env.DOCKER_CALL_ON_KVM_HOST }} /bin/bash -c "set -o pipefail && sudo make test | tee smoketest_system.log"
 
       - name: "Smoketest: configuration"
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && !inputs.SKIP_SMOKETEST_CONFIG }}
@@ -183,7 +183,7 @@ jobs:
           timeout: 15m
           command_timeout: 180m
           script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST }} /bin/bash -c "sudo make testc | tee smoketest_configuration.log"
+            ${{ env.DOCKER_CALL_ON_KVM_HOST }} /bin/bash -c "set -o pipefail && sudo make testc | tee smoketest_configuration.log"
 
       - name: "Smoketest: clear files"
         if: ${{ !inputs.FAKE_BUILDING_PROCESS && (!inputs.SKIP_SMOKETEST_RAID1 || !inputs.SKIP_SMOKETEST_SYSTEM || !inputs.SKIP_SMOKETEST_CONFIG) }}
