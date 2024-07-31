@@ -52,7 +52,6 @@ env:
   BUILD_BY: autobuild@vyos.net
   DEBIAN_MIRROR: http://deb.debian.org/debian/
   VYOS_MIRROR: https://rolling-packages.vyos.net/current/
-  DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL: docker run --rm --privileged --pull=always -v ~/vyos-build:/vyos -w /vyos vyos/vyos-build:current
 
 jobs:
   build_iso:
@@ -107,12 +106,10 @@ jobs:
       - name: Sign generic ISO image
         shell: bash
         run: |
-          ls -al
           echo "${{ secrets.minisign_private_key }}" > /tmp/minisign.key
           echo ${{ secrets.minisign_password }} | $GITHUB_WORKSPACE/bin/minisign -s /tmp/minisign.key -Sm vyos-${{ steps.set_env_variables.outputs.build_version }}-generic-amd64.iso
           echo "${{ secrets.minisign_public_key }}" > /tmp/minisign.pub
           $GITHUB_WORKSPACE/bin/minisign -Vm vyos-${{ steps.set_env_variables.outputs.build_version }}-generic-amd64.iso -x vyos-${{ steps.set_env_variables.outputs.build_version }}-generic-amd64.iso.minisig -p /tmp/minisign.pub
-          ls -al
           rm /tmp/minisign.key /tmp/minisign.pub
 
       - uses: actions/upload-artifact@v4
@@ -126,6 +123,9 @@ jobs:
     needs: build_iso
     runs-on: ubuntu-24.04
     if: ${{ !inputs.SKIP_SMOKETEST_SYSTEM }}
+    container:
+      image: vyos/vyos-build:current
+      options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
     steps:
       # We need the test script from vyos-build repo
       - name: Clone vyos-build source code
@@ -137,22 +137,20 @@ jobs:
           name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
           path: build
       - name: VyOS CLI smoketests
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          timeout: 15m
-          command_timeout: 180m
-          script_stop: true
-          script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL }} /bin/bash -c "sudo make test | tee smoketest_system.log"
+        id: test
+        shell: bash
+        run: |
+          ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
+          ls -al;
+          ls -al build; set -e; sudo make test
 
   test_config_load:
     needs: build_iso
     runs-on: ubuntu-24.04
     if: ${{ !inputs.SKIP_SMOKETEST_CONFIG }}
+    container:
+      image: vyos/vyos-build:current
+      options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
     steps:
       # We need the test script from vyos-build repo
       - name: Clone vyos-build source code
@@ -164,22 +162,20 @@ jobs:
           name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
           path: build
       - name: VyOS config load tests
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          timeout: 15m
-          command_timeout: 180m
-          script_stop: true
-          script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL }} /bin/bash -c "sudo make testc | tee smoketest_configuration.log"
+        id: test
+        shell: bash
+        run: |
+          ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
+          ls -al;
+          ls -al build; set -e; sudo make testc
 
   test_raid1_install:
     needs: build_iso
     runs-on: ubuntu-24.04
     if: ${{ !inputs.SKIP_SMOKETEST_RAID1 }}
+    container:
+      image: vyos/vyos-build:current
+      options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
     steps:
       # We need the test script from vyos-build repo
       - name: Clone vyos-build source code
@@ -190,18 +186,13 @@ jobs:
         with:
           name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
           path: build
-      - name: RAID1 installation tests
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          timeout: 15m
-          command_timeout: 180m
-          script_stop: true
-          script: |
-            ${{ env.DOCKER_CALL_ON_KVM_HOST_WITH_IMAGE_PULL }} /bin/bash -c "set -o pipefail && sudo make testraid | tee smoketest_raid.log"
+      - name: VyOS RAID1 installation tests
+        id: test
+        shell: bash
+        run: |
+          ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
+          ls -al;
+          ls -al build; set -e; sudo make testraid
 
   publish:
     needs:
