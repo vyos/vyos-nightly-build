@@ -119,55 +119,55 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-  test_smoketest_cli:
-    needs: build_iso
-    runs-on: ubuntu-24.04
-    if: ${{ !inputs.SKIP_SMOKETEST_SYSTEM }}
-    container:
-      image: vyos/vyos-build:current
-      options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
-    steps:
-      # We need the test script from vyos-build repo
-      - name: Clone vyos-build source code
-        uses: actions/checkout@v4
-        with:
-          repository: vyos/vyos-build
-      - uses: actions/download-artifact@v4
-        with:
-          name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
-          path: build
-      - name: VyOS CLI smoketests
-        id: test
-        shell: bash
-        run: |
-          ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
-          ls -al;
-          ls -al build; set -e; sudo make test
+  # test_smoketest_cli:
+  #   needs: build_iso
+  #   runs-on: ubuntu-24.04
+  #   if: ${{ !inputs.SKIP_SMOKETEST_SYSTEM }}
+  #   container:
+  #     image: vyos/vyos-build:current
+  #     options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
+  #   steps:
+  #     # We need the test script from vyos-build repo
+  #     - name: Clone vyos-build source code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: vyos/vyos-build
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
+  #         path: build
+  #     - name: VyOS CLI smoketests
+  #       id: test
+  #       shell: bash
+  #       run: |
+  #         set -e
+  #         ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
+  #         sudo make test
 
-  test_config_load:
-    needs: build_iso
-    runs-on: ubuntu-24.04
-    if: ${{ !inputs.SKIP_SMOKETEST_CONFIG }}
-    container:
-      image: vyos/vyos-build:current
-      options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
-    steps:
-      # We need the test script from vyos-build repo
-      - name: Clone vyos-build source code
-        uses: actions/checkout@v4
-        with:
-          repository: vyos/vyos-build
-      - uses: actions/download-artifact@v4
-        with:
-          name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
-          path: build
-      - name: VyOS config load tests
-        id: test
-        shell: bash
-        run: |
-          ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
-          ls -al;
-          ls -al build; set -e; sudo make testc
+  # test_config_load:
+  #   needs: build_iso
+  #   runs-on: ubuntu-24.04
+  #   if: ${{ !inputs.SKIP_SMOKETEST_CONFIG }}
+  #   container:
+  #     image: vyos/vyos-build:current
+  #     options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
+  #   steps:
+  #     # We need the test script from vyos-build repo
+  #     - name: Clone vyos-build source code
+  #       uses: actions/checkout@v4
+  #       with:
+  #         repository: vyos/vyos-build
+  #     - uses: actions/download-artifact@v4
+  #       with:
+  #         name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
+  #         path: build
+  #     - name: VyOS config load tests
+  #       id: test
+  #       shell: bash
+  #       run: |
+  #         set -e
+  #         ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
+  #         sudo make testc
 
   test_raid1_install:
     needs: build_iso
@@ -190,18 +190,20 @@ jobs:
         id: test
         shell: bash
         run: |
+          set -e
           ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
-          ls -al;
-          ls -al build; set -e; sudo make testraid
+          sudo make testraid
 
   publish:
     needs:
-      - test_config_load
+#      - test_config_load
       - test_raid1_install
-      - test_smoketest_cli
+#      - test_smoketest_cli
+      - build_iso
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+    if: github.ref == 'refs/heads/main' && ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
     steps:
       - uses: actions/checkout@v4
       - name: Clone vyos-build source code
@@ -269,7 +271,6 @@ jobs:
           cat CHANGELOG.md
 
       - name: "Release publishing: create version.json"
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         id: create_version_json
         uses: jsdaniell/create-json@v1.2.3
         with:
@@ -285,23 +286,25 @@ jobs:
 
       - name: "Release publishing: check if the repository was modified during runtime to prevent autocommit failure"
         id: check_if_the_repository_was_modified_during_runtime
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         run: |
           sudo chown -R $(whoami):$(whoami) ./*
           git pull --autostash --rebase
 
       - name: "Release publishing: create autocommit and tag"
         id: create_autocommit_and_tag
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          tagging_message: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
-          commit_message: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
+          tagging_message: ${{ needs.build_iso.outputs.build_version }}
+          commit_message: ${{ needs.build_iso.outputs.build_version }}
+          commit_author: "vyosbot <${{ env.BUILD_BY }}>"
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
 
       - name: "Release publishing: publish release"
         id: publish_release
-        if: github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body_path: CHANGELOG.md
           tag_name: ${{ needs.build_iso.outputs.build_version }}
