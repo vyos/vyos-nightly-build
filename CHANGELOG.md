@@ -1,24 +1,18 @@
 ## vyos-1x
-- op_mode: T5744: PKI import OpenVPN shared key includess unexpected BEGIN and END
-   - PR: vyos/vyos-1x#3879
-- ipsec: T6148: Fixed reset command by adding init after terminating
-   - PR: vyos/vyos-1x#3763
-- smoketest: T5705: use locally connected remote syslog servers
-   - PR: vyos/vyos-1x#3889
-- smoketest: T6614: initial support for op-mode command testing
-   - PR: vyos/vyos-1x#3888
-- smoketest: T6592: remove unused "import os"
-   - PR: vyos/vyos-1x#3874
-- T6349: Fix typo in file name
-   - PR: vyos/vyos-1x#3897
-- firewall: T4694: incomplete node checks in migration script
-   - PR: vyos/vyos-1x#3895
-- OpenVPN CLI-option: T6571: rename ncp-ciphers with data-ciphers
-   - PR: vyos/vyos-1x#3823
-- T6362: Create conntrack logger daemon
-   - PR: vyos/vyos-1x#3804
-- vyos.configtree: T6620: allow list_nodes() to work on non-existent paths
-   - PR: vyos/vyos-1x#3898
+- pbr: T6430: Allow forwarding into VRFs by name as well as route table IDs
+   - PR: vyos/vyos-1x#3740
+- vrf: T6603: conntrack ct_iface_map must only contain one entry for iifname/oifname
+   - PR: vyos/vyos-1x#3883
+- T6572: trigger remote pr only for circinus pr merge
+   - PR: vyos/vyos-1x#3899
+- system: op-mode: T3334: allow delayed getty restart when configuring serial ports
+   - PR: vyos/vyos-1x#3698
+- T6486: T6379: Rewrite generate openvpn client-config
+   - PR: vyos/vyos-1x#3747
+- GitHub: T6560: action must be run on forked repo
+   - PR: vyos/vyos-1x#3902
+- ipsec: T6148: Removed unused imports
+   - PR: vyos/vyos-1x#3915
 
 
 ## vyos-build
