@@ -1,7 +1,7 @@
 [
   {
-    "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/vyos--generic-amd64/vyos--generic-amd64.iso",
-    "version": "",
+    "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/vyos-1.5-rolling-202408041314-generic-amd64/vyos-1.5-rolling-202408041314-generic-amd64.iso",
+    "version": "1.5-rolling-202408041314",
     "timestamp": ""
   }
 ]

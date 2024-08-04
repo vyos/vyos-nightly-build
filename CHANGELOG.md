@@ -1,14 +1,4 @@
 ## vyos-1x
-- T6219: Add support for container sysctl parameter
-   - PR: vyos/vyos-1x#3614
-- T6467: add PR checks workflows for sagitta branch
-   - PR: vyos/vyos-1x#3615
-- T6442: CGNAT add log for address allocation
-   - PR: vyos/vyos-1x#3621
-- T6469: remove j2 lint workflow
-   - PR: vyos/vyos-1x#3626
-- op-mode: T6471: add optimized get_config_dict
-   - PR: vyos/vyos-1x#3628
 - firewall: T3900: fix migration and smoketests
    - PR: vyos/vyos-1x#3632
 - bgp: T6473: missing completion helper for peer-groups inside a VRF
@@ -215,8 +205,6 @@
    - PR: vyos/vyos-1x#3873
 - op_mode: T5744: PKI import OpenVPN shared key includess unexpected BEGIN and END
    - PR: vyos/vyos-1x#3879
-- firewall: T4694: Adding rt ipsec exists/missing match to firewall configs
-   - PR: vyos/vyos-1x#3616
 - ipsec: T6148: Fixed reset command by adding init after terminating
    - PR: vyos/vyos-1x#3763
 - smoketest: T5705: use locally connected remote syslog servers
@@ -255,6 +243,18 @@
    - PR: vyos/vyos-1x#3903
 - console: T3334: remove unused directories imported from vyos.defaults
    - PR: vyos/vyos-1x#3923
+- nat64: T6627: call check_kmod within standard config function
+   - PR: vyos/vyos-1x#3927
+- T6486: use data-ciphers instead of ncp-ciphers in "run generate openvpn client-config"
+   - PR: vyos/vyos-1x#3930
+- T6619: Remove the remaining uses of per-protocol FRR configs
+   - PR: vyos/vyos-1x#3916
+- T6629: call check_kmod within a standard config function
+   - PR: vyos/vyos-1x#3932
+- T6632: add missing standard functions to config scripts
+   - PR: vyos/vyos-1x#3933
+- T4072: firewall extend bridge firewall
+   - PR: vyos/vyos-1x#3901
 
 
 ## vyos-build
