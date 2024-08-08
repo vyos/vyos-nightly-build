@@ -1,12 +1,10 @@
 ## vyos-1x
-- OPENVPN: T6555: add server-bridge options in mode server
-   - PR: vyos/vyos-1x#3920
-- T6560: T4694: T6555: multiple minor bugfixes for package build
-   - PR: vyos/vyos-1x#3942
-- smoketest: T6555: openvpn: NameError: name 'elf' is not defined
-   - PR: vyos/vyos-1x#3947
-- T6634: README: Add image graphs of contributors
-   - PR: vyos/vyos-1x#3944
+- sysctl: T3204: restore sysctl settings overwritten by tuned
+   - PR: vyos/vyos-1x#3945
+- smoketest: T6614: add op-mode test for Kernel version
+   - PR: vyos/vyos-1x#3946
+- T6637: py files filter added for unused import check
+   - PR: vyos/vyos-1x#3949
 
 
 ## vyos-build
