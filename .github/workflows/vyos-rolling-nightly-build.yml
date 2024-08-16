@@ -194,11 +194,37 @@ jobs:
           ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
           sudo make testraid
 
+  test_encrypted_config_tpm:
+    needs: build_iso
+    runs-on: ubuntu-24.04
+    if: ${{ !inputs.SKIP_SMOKETEST_RAID1 }}
+    container:
+      image: vyos/vyos-build:current
+      options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
+    steps:
+      # We need the test script from vyos-build repo
+      - name: Clone vyos-build source code
+        uses: actions/checkout@v4
+        with:
+          repository: vyos/vyos-build
+      - uses: actions/download-artifact@v4
+        with:
+          name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
+          path: build
+      - name: VyOS TPM encryption tests
+        id: test
+        shell: bash
+        run: |
+          set -e
+          ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
+          sudo make testtpm
+
   publish:
     needs:
       - test_config_load
       - test_raid1_install
       - test_smoketest_cli
+      - test_encrypted_config_tpm
       - build_iso
     runs-on: ubuntu-24.04
     permissions:
@@ -220,19 +246,18 @@ jobs:
          shell: bash
          run: |
           cd vyos-build
-          echo "CHANGELOG_COMMIT_build=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_OUTPUT
+          echo "CHANGELOG_COMMIT_VYOS_BUILD=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_OUTPUT
           cd ../vyos-1x
-          echo "CHANGELOG_COMMIT_1x=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_OUTPUT
+          echo "CHANGELOG_COMMIT_VYOS_1X=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_OUTPUT
 
       - name: "Release publishing: generate changelog for vyos-1x"
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         id: generate_changelog_for_vyos-1x
         uses: mikepenz/release-changelog-builder-action@v4.1.0
         with:
           owner: "vyos"
           repo: "vyos-1x"
           fetchReviewers: false
-          fromTag: ${{ steps.commit_ids.outputs.CHANGELOG_COMMIT_1x }}
+          fromTag: ${{ steps.commit_ids.outputs.CHANGELOG_COMMIT_VYOS_1X }}
           toTag: HEAD
           configurationJson: |
             {
@@ -242,14 +267,13 @@ jobs:
             }
 
       - name: "Release publishing: generate changelog for vyos-build"
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING && env.CHANGELOG_COMMIT_build }}
         id: generate_changelog_for_vyos-build
         uses: mikepenz/release-changelog-builder-action@v4.1.0
         with:
           owner: "vyos"
           repo: "vyos-build"
           fetchReviewers: false
-          fromTag: ${{ steps.commit_ids.outputs.CHANGELOG_COMMIT_build }}
+          fromTag: ${{ steps.commit_ids.outputs.CHANGELOG_COMMIT_VYOS_BUILD }}
           toTag: HEAD
           configurationJson: |
             {
@@ -259,19 +283,16 @@ jobs:
             }
 
       - name: "Release publishing: generate CHANGELOG.md"
-        id: generate_changelog_md
-        if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
         run: |
           cat <<EOF > CHANGELOG.md
           ## vyos-1x
           ${{ steps.generate_changelog_for_vyos-1x.outputs.changelog }}
           ## vyos-build
-          ${{ steps.generate-build-changelog.outputs.changelog }}
+          ${{ steps.generate_changelog_for_vyos-build.outputs.changelog }}
           EOF
           cat CHANGELOG.md
 
       - name: "Release publishing: create version.json"
-        id: create_version_json
         uses: jsdaniell/create-json@v1.2.3
         with:
           name: "version.json"
@@ -291,7 +312,6 @@ jobs:
           git pull --autostash --rebase
 
       - name: "Release publishing: create autocommit and tag"
-        id: create_autocommit_and_tag
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           tagging_message: ${{ needs.build_iso.outputs.build_version }}
@@ -303,7 +323,6 @@ jobs:
           name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
 
       - name: "Release publishing: publish release"
-        id: publish_release
         uses: softprops/action-gh-release@v2
         with:
           body_path: CHANGELOG.md
@@ -312,3 +331,11 @@ jobs:
           files: |
             ./vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso
             ./vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso.minisig
+
+      - name: "Release publishing: remove old releases"
+        uses: dev-drprasad/delete-older-releases@v0.3.2
+        with:
+          keep_latest: 30
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
