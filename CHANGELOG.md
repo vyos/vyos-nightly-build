@@ -1,62 +1,12 @@
 ## vyos-1x
-- T6219: Add support for container sysctl parameter
-   - PR: vyos/vyos-1x#3614
-- T6467: add PR checks workflows for sagitta branch
-   - PR: vyos/vyos-1x#3615
-- T6442: CGNAT add log for address allocation
-   - PR: vyos/vyos-1x#3621
-- T6469: remove j2 lint workflow
-   - PR: vyos/vyos-1x#3626
-- op-mode: T6471: add optimized get_config_dict
-   - PR: vyos/vyos-1x#3628
-- firewall: T3900: fix migration and smoketests
-   - PR: vyos/vyos-1x#3632
-- bgp: T6473: missing completion helper for peer-groups inside a VRF
-   - PR: vyos/vyos-1x#3638
-- T6476: added sonarcloud workflow
-   - PR: vyos/vyos-1x#3642
-- op_mode: T6227:  Rewrite show conntrack-sync cache internal to use tabulate output
-   - PR: vyos/vyos-1x#3644
-- openvpn: T5487:  Remove deprecated option --cipher for server and client mode
-   - PR: vyos/vyos-1x#3639
-- T6487: updated central workflows to use current branch
-   - PR: vyos/vyos-1x#3647
-- op-mode: T6407: "generate pki" missed to mangle in ACME certificates when required
-   - PR: vyos/vyos-1x#3646
-- op-mode: T6480: must call pki.py helper as root to work with ACME certificates
-   - PR: vyos/vyos-1x#3645
-- openvpn: T5487: make migration script executable
-   - PR: vyos/vyos-1x#3653
-- openvpn: T5487:  Fix migration smoketests commands
-   - PR: vyos/vyos-1x#3659
-- T6494: Update sonarcloud.yml and add more branches for scanning
-   - PR: vyos/vyos-1x#3661
-- sonarcloud: Revert "T6494: Update sonarcloud.yml and add more branches for scanning"
-   - PR: vyos/vyos-1x#3663
-- wireless: T6318: move country-code to a system wide configuration
-   - PR: vyos/vyos-1x#3656
-- pki: T4026: Only emit private keys when available
-   - PR: vyos/vyos-1x#3655
-- pki: T6241: remove debug print statement about updated subsystems
-   - PR: vyos/vyos-1x#3657
-- wireless: T6318: add quotes for console speed in config-tests
-   - PR: vyos/vyos-1x#3675
-- T6489: Add support for CLI config scripts that change the underlaying working configuration
-   - PR: vyos/vyos-1x#3652
-- T6492: Check if all migrators have the executable bit set
-   - PR: vyos/vyos-1x#3678
 - T6497: CGNAT delete conntrack entries if a pool is modified
    - PR: vyos/vyos-1x#3680
 - macsec: T5447: fix error message syntax - there is no tx and rx key, only key
    - PR: vyos/vyos-1x#3685
 - openconnect: T6500: add support for multiple ca-certificates
    - PR: vyos/vyos-1x#3682
-- T5949: Add option to disable USB autosuspend
-   - PR: vyos/vyos-1x#3677
 - T3900: firewall: fix for initial implementation
    - PR: vyos/vyos-1x#3693
-- op-mode: T5514: Allow safe reboots to config defaults when config.boot is deleted
-   - PR: vyos/vyos-1x#3654
 - snmp: T6489: use new Python wrapper to interact with config filesystem
    - PR: vyos/vyos-1x#3694
 - op mode: T6498: move uptime helpers to vyos.utils.system
@@ -215,8 +165,6 @@
    - PR: vyos/vyos-1x#3873
 - op_mode: T5744: PKI import OpenVPN shared key includess unexpected BEGIN and END
    - PR: vyos/vyos-1x#3879
-- firewall: T4694: Adding rt ipsec exists/missing match to firewall configs
-   - PR: vyos/vyos-1x#3616
 - ipsec: T6148: Fixed reset command by adding init after terminating
    - PR: vyos/vyos-1x#3763
 - smoketest: T5705: use locally connected remote syslog servers
@@ -255,7 +203,334 @@
    - PR: vyos/vyos-1x#3903
 - console: T3334: remove unused directories imported from vyos.defaults
    - PR: vyos/vyos-1x#3923
+- nat64: T6627: call check_kmod within standard config function
+   - PR: vyos/vyos-1x#3927
+- T6486: use data-ciphers instead of ncp-ciphers in "run generate openvpn client-config"
+   - PR: vyos/vyos-1x#3930
+- T6619: Remove the remaining uses of per-protocol FRR configs
+   - PR: vyos/vyos-1x#3916
+- T6629: call check_kmod within a standard config function
+   - PR: vyos/vyos-1x#3932
+- T6632: add missing standard functions to config scripts
+   - PR: vyos/vyos-1x#3933
+- T4072: firewall extend bridge firewall
+   - PR: vyos/vyos-1x#3901
+- T5873: T6619: remove unused imports
+   - PR: vyos/vyos-1x#3939
+- OPENVPN: T6555: add server-bridge options in mode server
+   - PR: vyos/vyos-1x#3920
+- T6560: T4694: T6555: multiple minor bugfixes for package build
+   - PR: vyos/vyos-1x#3942
+- smoketest: T6555: openvpn: NameError: name 'elf' is not defined
+   - PR: vyos/vyos-1x#3947
+- T6634: README: Add image graphs of contributors
+   - PR: vyos/vyos-1x#3944
+- sysctl: T3204: restore sysctl settings overwritten by tuned
+   - PR: vyos/vyos-1x#3945
+- smoketest: T6614: add op-mode test for Kernel version
+   - PR: vyos/vyos-1x#3946
+- T6637: py files filter added for unused import check
+   - PR: vyos/vyos-1x#3949
+- configd: T6640: enforce in_session returns False under configd
+   - PR: vyos/vyos-1x#3955
+- qos: T6638: require interface state existence in verify conditional
+   - PR: vyos/vyos-1x#3960
+- T6643: firewall: fix ip address range parsing on firewall rules.
+   - PR: vyos/vyos-1x#3964
+- T6637: add pr commenting back in un-used import check
+   - PR: vyos/vyos-1x#3965
+- configverify: T6642: verify_interface_exists requires config_dict arg
+   - PR: vyos/vyos-1x#3961
+- configd: T6633: inject missing env vars for configfs utility
+   - PR: vyos/vyos-1x#3937
+- T6648: dhcpv6-server: align stateless DHCPv6 options with stateful
+   - PR: vyos/vyos-1x#3970
+- suricata: T6624: Make it possible for suricata address groups to reference each other
+   - PR: vyos/vyos-1x#3958
+- xml: T6650: add initial op-mode cache support
+   - PR: vyos/vyos-1x#3971
+- T6646: conntrack: in ignore rules, if protocols=all, do not append it to the rule
+   - PR: vyos/vyos-1x#3981
+- op_mode: T6651: Add a top level op mode word "execute"
+   - PR: vyos/vyos-1x#3980
+- T6636: firewall: fix firewall template in order print logs for default-action
+   - PR: vyos/vyos-1x#3982
+- T5794: firewall: change firewall priority in oder to be loaded after all interfaces
+   - PR: vyos/vyos-1x#3988
+- utils: T6658: fix write_file check in case of empty directory path
+   - PR: vyos/vyos-1x#3989
+- ipoe_server: T6649: Accel-ppp separate vlan-mon from listen interfaces
+   - PR: vyos/vyos-1x#3987
+- T6659: suricata: use unique cluster_id per interface
+   - PR: vyos/vyos-1x#3992
 
 
 ## vyos-build
+- T4204: accel-ppp bump version 9669bcb99adc
+   - PR: vyos/vyos-build#436
+- pmacct: T5663: the garbage headers issue fix
+   - PR: vyos/vyos-build#441
+- keepalived:T5402:Added patch with arp_ignore to 1 on IPv6 VMACs
+   - PR: vyos/vyos-build#442
+- T5695: Add LUA script to build FRR
+   - PR: vyos/vyos-build#445
+- T5415: upgrade libyang library to v2.1.128
+   - PR: vyos/vyos-build#446
+- T5701: Bump telegraf to version v1.28.3
+   - PR: vyos/vyos-build#448
+- T5701: Fix build telegraf package
+   - PR: vyos/vyos-build#450
+- build script: T5711: copy version.json to the ISO image in addition to the SquashFS image
+   - PR: vyos/vyos-build#452
+- ddclient: T5708: Upgrade to ddclient 3.11.1
+   - PR: vyos/vyos-build#453
+- T5689: Include librtr-dev in Debian dependencies to fix RPKI crash
+   - PR: vyos/vyos-build#454
+- T5776: kernel enable VFIO support
+   - PR: vyos/vyos-build#459
+- T5754 strongswan upgrade
+   - PR: vyos/vyos-build#457
+- T2640: update VyOS in docker image to current version
+   - PR: vyos/vyos-build#462
+- ddclient: T5797: Upgrade to ddclient 3.11.2
+   - PR: vyos/vyos-build#464
+- T5809: live-build-config: insmod gzio for vmlinuz kernels on arm64
+   - PR: vyos/vyos-build#468
+- initramfs: T5824: Added  to initramfs
+   - PR: vyos/vyos-build#469
+- dhcp: T5840: Upgrade to Kea 2.4.x
+   - PR: vyos/vyos-build#473
+- dhcp: T5840: Upgrade to Kea 2.4.x (fix copyright year)
+   - PR: vyos/vyos-build#475
+- kernel: T5838: Enabled Infiniband for  and 
+   - PR: vyos/vyos-build#476
+- ssh: T5841: Remove ssh-session-cleanup.service
+   - PR: vyos/vyos-build#474
+- container: T5867: upgrade podman to 4.7.2 (Debian Trixie)
+   - PR: vyos/vyos-build#480
+- Kernel: T5887: update Linux Kernel to v6.6.9
+   - PR: vyos/vyos-build#482
+- T3429: Add kernel modules for Hyper-V
+   - PR: vyos/vyos-build#484
+- T5945: add minisign public key for rolling release
+   - PR: vyos/vyos-build#486
+- T5954: Enable nvme_hwmon and drivetemp
+   - PR: vyos/vyos-build#488
+- Kernel: T5887: T5619: T5995: Update to v6.6.15, add IXGBE out-of-tree drivers and Huawei NIC driver
+   - PR: vyos/vyos-build#490
+- T6014: Bump keepalived version to 2.2.8-1
+   - PR: vyos/vyos-build#493
+- frr: T6023: add pending upstream patches
+   - PR: vyos/vyos-build#497
+- Kernel: T5499: update arm64 kernel configuration to v6.6.15
+   - PR: vyos/vyos-build#495
+- frr: T5788: update to 9.1 release
+   - PR: vyos/vyos-build#499
+- T6009-6019: fix hour decoding when timezone offset is negative; bump libnftnl and nftables version.
+   - PR: vyos/vyos-build#501
+- isc-dhcp: T5965: add custom package build with dhclient patches for WWAN
+   - PR: vyos/vyos-build#503
+- build: T3664: fix the chroot includes path
+   - PR: vyos/vyos-build#505
+- build: T4919: Fix error due to variable not found
+   - PR: vyos/vyos-build#524
+- docker, build: T6119: use python3-tomli instead of python3-toml for a compliant implementation ot TOML
+   - PR: vyos/vyos-build#527
+- build: T1449: add default_config field support in flavor files to allow people to easily include a custom default config
+   - PR: vyos/vyos-build#533
+- T6115: Fix tagged builds from detached Git HEAD
+   - PR: vyos/vyos-build#526
+- Kernel: T4022: add RTSP netfilter helper kernel module
+   - PR: vyos/vyos-build#525
+- chore: T671: remove unused scripts and references to them
+   - PR: vyos/vyos-build#536
+- ixgbe: T6155: always enable allow_unsupported_sfp for all NICs by default
+   - PR: vyos/vyos-build#538
+- build flavors: T3664: reimplement Dell VEP flavors using the new system
+   - PR: vyos/vyos-build#537
+- build scripts: T3664: move image build scripts to a dedicated directory
+   - PR: vyos/vyos-build#541
+- Github: PR Template: make related tasks optional
+   - PR: vyos/vyos-build#542
+- T6033: bump hsflowd version v2.0.55-1 extended PCAP capabilities
+   - PR: vyos/vyos-build#544
+- T4204: accel-ppp bump version 1.13.0
+   - PR: vyos/vyos-build#546
+- dropbear: T6195: package upgrade 2022.83-1+deb12u1
+   - PR: vyos/vyos-build#547
+- T5124: Python3 deprecation distutils
+   - PR: vyos/vyos-build#549
+- image-tools: T6207: update test script for prompt for boot config
+   - PR: vyos/vyos-build#551
+- T6173: validate allowed characters in ISO image name
+   - PR: vyos/vyos-build#553
+- T1797: Delete not exist disable vpp service
+   - PR: vyos/vyos-build#555
+- T6228: Cleanup of not existing systemd units
+   - PR: vyos/vyos-build#556
+- T6235: Git update actions-label-merge-conflict version
+   - PR: vyos/vyos-build#561
+- T6238: Check pull request title action requires the python script
+   - PR: vyos/vyos-build#560
+- T6173: fix TypeError: 'NoneType' object is not iterable
+   - PR: vyos/vyos-build#565
+- ntp: T6080: T6123: restrict config.boot.default NTP settings to RFC1918 and fe80::/10, fc00::/7 only
+   - PR: vyos/vyos-build#559
+- T6238: Fix title check commit message for f-string
+   - PR: vyos/vyos-build#568
+- image-tools: T6154: installer prompts to confirm password
+   - PR: vyos/vyos-build#569
+- build: T3664: add support for building non-ISO flavors
+   - PR: vyos/vyos-build#550
+- build: T3664: move the vyos-1x submodule to packages
+   - PR: vyos/vyos-build#574
+- iso: T6262: update the boot splash for 1.5/Circinus
+   - PR: vyos/vyos-build#575
+- build: T3664: typo fixes and small refactoring
+   - PR: vyos/vyos-build#576
+- ixgbe: T6162: Add 1000BASE-BX support
+   - PR: vyos/vyos-build#540
+- kernel: T6286: Enable Generic driver for Hyper-V VMBus
+   - PR: vyos/vyos-build#579
+- build: T3664: clone vyos-1x under build dir instead of as submodule
+   - PR: vyos/vyos-build#585
+- container: T5867: podman depends on libgpgme11t64 from trixie
+   - PR: vyos/vyos-build#586
+- T6293: add Mediatek MT7921 to defconfig
+   - PR: vyos/vyos-build#584
+- build: T3664: fix regression and bug in build script clone of vyos-1x repo
+   - PR: vyos/vyos-build#590
+- frr: T6283: T6250: add pending upstream patches
+   - PR: vyos/vyos-build#591
+- T6307: Add dependency procps to build vyos-1x
+   - PR: vyos/vyos-build#594
+- build: T3664: modify the module-level template path instead of setting an environment variable
+   - PR: vyos/vyos-build#596
+- T6311: Docker add dependency asciidoc-base for nftables
+   - PR: vyos/vyos-build#598
+- build: T3664: fix architecture mix-in loading
+   - PR: vyos/vyos-build#600
+- build-script: T3664: Added more options to the image format
+   - PR: vyos/vyos-build#603
+- build: T3664: use explicit defaults argument in the dict merging function
+   - PR: vyos/vyos-build#606
+- build: T3664: include build flavor name in the version file
+   - PR: vyos/vyos-build#605
+- build: T3664: include the architecture field in version data
+   - PR: vyos/vyos-build#609
+- build: T6330: fix indention of autogenerated release.pref.chroot
+   - PR: vyos/vyos-build#612
+- build-script: T3664: Added flavor name to a target file name
+   - PR: vyos/vyos-build#616
+- T3420: Remove service upnp
+   - PR: vyos/vyos-build#618
+- suricata: T751: Disable suricata.service by default
+   - PR: vyos/vyos-build#582
+- build-script: T3664: Add flavor and architecture to image name (rework)
+   - PR: vyos/vyos-build#620
+- T6333 non-free-firmware to trixie
+   - PR: vyos/vyos-build#614
+- hooks: T6346: set default boot target to multi-user.target
+   - PR: vyos/vyos-build#624
+- T6356: normalize '.., ntp, server' path syntax in config.boot.default
+   - PR: vyos/vyos-build#626
+- build-script: T3664: Allowed all options in both config file and comm…
+   - PR: vyos/vyos-build#622
+- Kernel: T5887: update Linux Kernel to v6.6.31
+   - PR: vyos/vyos-build#629
+- frr: T6250: T6283: revert local patches merged upstream
+   - PR: vyos/vyos-build#631
+- T6386: added caller workflows and codeowners
+   - PR: vyos/vyos-build#634
+- docker: T6388: use OCaml 4.14.2 for package builds
+   - PR: vyos/vyos-build#635
+- kernel: T6395: Enabled VFIO_NOIOMMU support
+   - PR: vyos/vyos-build#638
+- T6399: codeowners correction
+   - PR: vyos/vyos-build#640
+- T6404: update vyos1x-config commit reference
+   - PR: vyos/vyos-build#641
+- T6406: enables container cpu limits
+   - PR: vyos/vyos-build#643
+- T6406: enables CONFIG_CFS_BANDWIDTH for cpu cgroup limits
+   - PR: vyos/vyos-build#645
+- build: T6414: rename the "iso" flavor to "generic"
+   - PR: vyos/vyos-build#646
+- T6415: Add repo-sync
+   - PR: vyos/vyos-build#648
+- build: T6446: include support URL in the version data file
+   - PR: vyos/vyos-build#649
+- migration: T6006: move config.boot.default to vyos-1x
+   - PR: vyos/vyos-build#651
+- waagent: T6475: Added waagent build instructions
+   - PR: vyos/vyos-build#654
+- waagent: T6475: Fixed waagent build script permissions
+   - PR: vyos/vyos-build#655
+- waagent: T6475: Disabled waagent build for ARM64
+   - PR: vyos/vyos-build#658
+- T6484: Smoketest: Increase KVM memory limit
+   - PR: vyos/vyos-build#656
+- docker: arm: T6474: Initial support for dynamic arch toml loading
+   - PR: vyos/vyos-build#653
+- Kernel: T5887: update Linux Kernel to v6.6.34
+   - PR: vyos/vyos-build#660
+- Kernel: T5887: update Linux Kernel to v6.6.35
+   - PR: vyos/vyos-build#666
+- T6508: pr workflows updated for branch and target
+   - PR: vyos/vyos-build#668
+- T6506: Add a linting rule for checking executable bits on scripts
+   - PR: vyos/vyos-build#675
+- Docker: T6510: add missing build dependencies for vyos-configd tests
+   - PR: vyos/vyos-build#677
+- T6507: remove references to vyos-world package
+   - PR: vyos/vyos-build#667
+- T6527: remove legacy packages
+   - PR: vyos/vyos-build#680
+- Kernel: T5887: update Linux Kernel to v6.6.36
+   - PR: vyos/vyos-build#681
+- T6546: unused import check permission update
+   - PR: vyos/vyos-build#685
+- snmp: T6290: add custom package build
+   - PR: vyos/vyos-build#686
+- Kernel: T5887: update Linux Kernel to v6.6.37
+   - PR: vyos/vyos-build#689
+- container: T5867: pin specific podman version
+   - PR: vyos/vyos-build#690
+- ddclient: T5797: switch to Debian SALSA repository
+   - PR: vyos/vyos-build#694
+- Kernel: T5887: update Linux Kernel to v6.6.39
+   - PR: vyos/vyos-build#693
+- T6584: Revert "T6293: add Mediatek MT7921 to defconfig"
+   - PR: vyos/vyos-build#699
+- hostapd: T6597: update hostapd version
+   - PR: vyos/vyos-build#702
+- frr: T6600: apply pending upstream patch for ospfd ldp-sync
+   - PR: vyos/vyos-build#704
+- Kernel: T5887: update Linux Kernel to v6.6.41
+   - PR: vyos/vyos-build#703
+- podman: T6598: add custom podman build for version 4.9.5
+   - PR: vyos/vyos-build#709
+- Revert "frr: T6600: apply pending upstream patch for ospfd ldp-sync"
+   - PR: vyos/vyos-build#710
+- podman: T6598: add search PATH for Go
+   - PR: vyos/vyos-build#711
+- Kernel: T5887: update Linux Kernel to v6.6.42
+   - PR: vyos/vyos-build#713
+- T6231: Mellanox OFED
+   - PR: vyos/vyos-build#665
+- build: T6231: include out-of-tree Mellanox driver in image
+   - PR: vyos/vyos-build#714
+- podman: T6598: add libgpgme11 runtime dependency
+   - PR: vyos/vyos-build#718
+- Kernel: T5887: update Linux Kernel to v6.6.43
+   - PR: vyos/vyos-build#722
+- T6386: Fix typo in file name
+   - PR: vyos/vyos-build#724
+- ddclient: T5792: Use Debian build from Trixie
+   - PR: vyos/vyos-build#723
+- podman: T6598: add fuse-overlayfs runtime dependency
+   - PR: vyos/vyos-build#729
+- Kernel: T5887: update Linux Kernel to v6.6.45
+   - PR: vyos/vyos-build#733
+
 
