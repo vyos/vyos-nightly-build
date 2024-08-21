@@ -62,7 +62,11 @@ jobs:
       image: vyos/vyos-build:current
       options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
     outputs:
+      BUILD_BY: ${{ steps.set_env_variables.outputs.BUILD_BY }}
       build_version: ${{ steps.set_env_variables.outputs.build_version }}
+      TIMESTAMP: ${{ steps.set_env_variables.outputs.TIMESTAMP }}
+      PREVIOUS_SUCCESS_BUILD_TIMESTAMP: ${{ steps.set_env_variables.outputs.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}
+
     steps:
       ### Initialization ###
       - uses: actions/checkout@v4
@@ -270,9 +274,9 @@ jobs:
          shell: bash
          run: |
           cd vyos-build
-          echo "CHANGELOG_COMMIT_VYOS_BUILD=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_OUTPUT
+          echo "CHANGELOG_COMMIT_VYOS_BUILD=$(git log --since "${{ needs.build_iso.outputs.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_OUTPUT
           cd ../vyos-1x
-          echo "CHANGELOG_COMMIT_VYOS_1X=$(git log --since "${{ env.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_OUTPUT
+          echo "CHANGELOG_COMMIT_VYOS_1X=$(git log --since "${{ needs.build_iso.outputs.PREVIOUS_SUCCESS_BUILD_TIMESTAMP }}" --format="%H" --reverse | head -n1)" >> $GITHUB_OUTPUT
 
       - name: "Release publishing: generate changelog for vyos-1x"
         id: generate_changelog_for_vyos-1x
@@ -325,7 +329,7 @@ jobs:
               {
                 "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64/vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso",
                 "version": "${{ needs.build_iso.outputs.build_version }}",
-                "timestamp": "${{ env.TIMESTAMP }}"
+                "timestamp": "${{ needs.build_iso.outputs.TIMESTAMP }}"
               }
             ]
 
@@ -340,7 +344,7 @@ jobs:
         with:
           tagging_message: ${{ needs.build_iso.outputs.build_version }}
           commit_message: ${{ needs.build_iso.outputs.build_version }}
-          commit_author: "vyosbot <${{ env.BUILD_BY }}>"
+          commit_author: "vyosbot <${{ needs.build_iso.outputs.BUILD_BY }}>"
 
       - uses: actions/download-artifact@v4
         with:
