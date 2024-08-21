@@ -29,6 +29,8 @@
    - PR: vyos/vyos-1x#3692
 - T6313: Add "NAT" to "generate" command for rule resequence
    - PR: vyos/vyos-1x#3715
+- T6497: CGNAT refactoring delete conntrack entries
+   - PR: vyos/vyos-1x#3699
 - op-mode: T5633, T6465: fix error when op cmd interrupted, updates some system call syntax
    - PR: vyos/vyos-1x#3731
 - pppoe-server: T5710: Add option permit any-login
@@ -249,6 +251,10 @@
    - PR: vyos/vyos-1x#3992
 - op_mode: T3961: Generate PKI expect 2 character country code
    - PR: vyos/vyos-1x#3997
+- T5743: HTTPS API ability to import PKI certificates
+   - PR: vyos/vyos-1x#3977
+- T6183: interfaces openvpn: suppport specifying IP protocol version
+   - PR: vyos/vyos-1x#3975
 
 
 ## vyos-build
