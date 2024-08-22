@@ -82,8 +82,9 @@ jobs:
           else
             echo "build_version=${{ github.event.inputs.build_version }}" >> $GITHUB_OUTPUT
           fi
-          echo "TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_ENV
-          echo "PREVIOUS_SUCCESS_BUILD_TIMESTAMP=$(cat version.json | jq -r '.[0].timestamp')" >> $GITHUB_ENV
+          echo "TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+          echo "PREVIOUS_SUCCESS_BUILD_TIMESTAMP=$(cat version.json | jq -r '.[0].timestamp')" >> $GITHUB_OUTPUT
+          echo "BUILD_BY=$BUILD_BY" >> $GITHUB_OUTPUT
 
       - name: Clone vyos-build source code
         uses: actions/checkout@v4
