@@ -25,8 +25,6 @@
    - PR: vyos/vyos-1x#3727
 - smoketest: T6510: remove build time test to check for /dev/input/event0
    - PR: vyos/vyos-1x#3729
-- T6007: revise migration system
-   - PR: vyos/vyos-1x#3692
 - T6313: Add "NAT" to "generate" command for rule resequence
    - PR: vyos/vyos-1x#3715
 - T6497: CGNAT refactoring delete conntrack entries
@@ -255,11 +253,15 @@
    - PR: vyos/vyos-1x#3977
 - T6183: interfaces openvpn: suppport specifying IP protocol version
    - PR: vyos/vyos-1x#3975
+- T6672: Fix system option ssh-client source-interface
+   - PR: vyos/vyos-1x#4000
+- op_mode: T6668: Add detailed statistics infomartion about MACsec 
+   - PR: vyos/vyos-1x#4001
+- T6561: Add vrf aware for show ntp
+   - PR: vyos/vyos-1x#4003
 
 
 ## vyos-build
-- T4204: accel-ppp bump version 9669bcb99adc
-   - PR: vyos/vyos-build#436
 - pmacct: T5663: the garbage headers issue fix
    - PR: vyos/vyos-build#441
 - keepalived:T5402:Added patch with arp_ignore to 1 on IPv6 VMACs
@@ -324,6 +326,20 @@
    - PR: vyos/vyos-build#503
 - build: T3664: fix the chroot includes path
    - PR: vyos/vyos-build#505
+- T6064: add build error if branch information from Git repository is missing
+   - PR: vyos/vyos-build#509
+- docker: T4440: add OCI container labels
+   - PR: vyos/vyos-build#506
+- T6078: package upgrade to v6.6 to match kernel for ethtool and iproute2
+   - PR: vyos/vyos-build#514
+- banner: T6077: implement ASCII contest winner default logo
+   - PR: vyos/vyos-build#513
+- frr: T5788: update libyang to v2.1.148
+   - PR: vyos/vyos-build#517
+- Revert "iproute2: T6078: upgrade package to 6.6 to match Kernel"
+   - PR: vyos/vyos-build#519
+- T6077: T3664: cleanup flavor build system and extensions for single source URL definitions
+   - PR: vyos/vyos-build#522
 - build: T4919: Fix error due to variable not found
    - PR: vyos/vyos-build#524
 - docker, build: T6119: use python3-tomli instead of python3-toml for a compliant implementation ot TOML
@@ -524,5 +540,9 @@
    - PR: vyos/vyos-build#729
 - Kernel: T5887: update Linux Kernel to v6.6.45
    - PR: vyos/vyos-build#733
+- Kernel: T5887: update Linux Kernel to v6.6.47
+   - PR: vyos/vyos-build#739
+- build: T6666: singular image_format in flavor files
+   - PR: vyos/vyos-build#738
 
 
