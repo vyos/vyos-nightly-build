@@ -1,4 +1,4 @@
-name: VyOS rolling nightly build
+name: VyOS nightly build
 
 on:
   schedule:
@@ -24,6 +24,11 @@ on:
         default: false
       SKIP_SMOKETEST_CONFIG:
         description: 'Skip config load test'
+        required: true
+        type: boolean
+        default: false
+      SKIP_SMOKETEST_TPM:
+        description: 'Skip TPM test'
         required: true
         type: boolean
         default: false
@@ -220,7 +225,7 @@ jobs:
   test_encrypted_config_tpm:
     needs: build_iso
     runs-on: ubuntu-24.04
-    if: ${{ !inputs.SKIP_SMOKETEST_RAID1 }}
+    if: ${{ !inputs.SKIP_SMOKETEST_TPM }}
     container:
       image: vyos/vyos-build:current
       options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
@@ -248,6 +253,85 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
+  slack:
+    needs:
+      - test_config_load
+      - test_raid1_install
+      - test_smoketest_cli
+      - test_encrypted_config_tpm
+      - build_iso
+    runs-on: ubuntu-24.04
+    if: failure()
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: logs
+          pattern: smoketest_make_*
+      - name: "Slack notification: filter Smoketest failed logs"
+        id: filter_smoketest_failed_logs
+        run: |
+          for logfile in $(find logs -type f -name "*.log")
+          do
+              echo $logfile
+              cat $logfile | grep '... FAIL' >> ${{ github.workspace }}/smoketest_filtered.log || true
+              cat $logfile | grep 'ERROR -' >> ${{ github.workspace }}/smoketest_filtered.log || true
+              cat $logfile | grep 'Error:' -A12 >> ${{ github.workspace }}/smoketest_filtered.log || true
+          done
+
+      - name: "Slack notification: send to channel"
+        id: send_a_slack_failure_notification
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "text": "*VyOS nightly build automation did not succeed*",
+              "attachments": [
+                {
+                  "color": "FF6600",
+                  "fields": [
+                    {
+                      "title": "Repository",
+                      "short": true,
+                      "value": "${{ github.repository }}"
+                    },
+                    {
+                      "title": "Workflow",
+                      "short": true,
+                      "value": "${{ github.workflow }}"
+                    },
+                    {
+                      "title": "Trigger",
+                      "short": true,
+                      "value": "${{ github.event_name }}"
+                    },
+                    {
+                      "title": "Run number",
+                      "short": true,
+                      "value": "${{ github.run_number }}"
+                    },
+                    {
+                      "title": "URL",
+                      "short": false,
+                      "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: "Slack notification: send Smoketest log excerpt"
+        uses: MeilCli/slack-upload-file@v4
+        with:
+          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          file_type: 'text'
+          file_path: ${{ github.workspace }}/smoketest_filtered.log
+          initial_comment: Smoketest log excerpt
+          if_no_files_found: ignore
+
   publish:
     needs:
       - test_config_load
@@ -258,7 +342,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
-    if: ${{ !inputs.SKIP_RELEASE_PUBLISHING }}
+    if: ${{ success() && !inputs.SKIP_RELEASE_PUBLISHING }}
     steps:
       - uses: actions/checkout@v4
       - name: Clone vyos-build source code
