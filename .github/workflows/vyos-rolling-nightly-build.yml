@@ -328,7 +328,7 @@ jobs:
           json: |
             [
               {
-                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64/vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso",
+                "url": "https://github.com/vyos/vyos-rolling-nightly-builds/releases/download/${{ needs.build_iso.outputs.build_version }}/vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso",
                 "version": "${{ needs.build_iso.outputs.build_version }}",
                 "timestamp": "${{ needs.build_iso.outputs.TIMESTAMP }}"
               }
