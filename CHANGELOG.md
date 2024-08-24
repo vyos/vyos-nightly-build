@@ -1,8 +1,4 @@
 ## vyos-1x
-- T3900: firewall: fix for initial implementation
-   - PR: vyos/vyos-1x#3693
-- snmp: T6489: use new Python wrapper to interact with config filesystem
-   - PR: vyos/vyos-1x#3694
 - op-mode: T6503: "restart ssh" command not working
    - PR: vyos/vyos-1x#3702
 - GitHub: T6494: add workflow to build custom ISO for integration tests
