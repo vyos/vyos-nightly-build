@@ -277,6 +277,7 @@ jobs:
               cat $logfile | grep 'ERROR -' >> ${{ github.workspace }}/smoketest_filtered.log || true
               cat $logfile | grep 'Error:' -A12 >> ${{ github.workspace }}/smoketest_filtered.log || true
           done
+          ls -al
 
       - name: "Slack notification: send to channel"
         id: send_a_slack_failure_notification
