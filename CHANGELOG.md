@@ -1,8 +1,6 @@
 ## vyos-1x
 - no changes
 ## vyos-build
-- T5776: kernel enable VFIO support
-   - PR: vyos/vyos-build#459
 - T2640: update VyOS in docker image to current version
    - PR: vyos/vyos-build#462
 - ddclient: T5797: Upgrade to ddclient 3.11.2
