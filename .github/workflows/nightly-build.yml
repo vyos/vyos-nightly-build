@@ -146,17 +146,48 @@ jobs:
         with:
           name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
           path: build
-      - name: VyOS CLI smoketests
+      - name: VyOS CLI smoketests (no interfaces)
         id: test
         shell: bash
         run: |
           set -e
           ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
-          sudo make test | tee smoketest_make_test.log
+          sudo make test-no-interfaces | tee smoketest_make_test_no_interfaces.log
       - uses: actions/upload-artifact@v4
         with:
-          name: smoketest_make_test
-          path: smoketest_make_test.log
+          name: smoketest_make_test_no_interfaces
+          path: smoketest_make_test_no_interfaces.log
+          retention-days: 30
+          if-no-files-found: error
+
+  test_interfaces_cli:
+    needs: build_iso
+    runs-on: ubuntu-24.04
+    if: ${{ !inputs.SKIP_SMOKETEST_SYSTEM }}
+    container:
+      image: vyos/vyos-build:current
+      options: --sysctl net.ipv6.conf.lo.disable_ipv6=0 --privileged
+    steps:
+      # We need the test script from vyos-build repo
+      - name: Clone vyos-build source code
+        uses: actions/checkout@v4
+        with:
+          repository: vyos/vyos-build
+      - uses: actions/download-artifact@v4
+        with:
+          name: vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64
+          path: build
+      - name: VyOS CLI smoketests (interfaces only)
+        id: test
+        shell: bash
+        run: |
+          set -e
+          ln -s vyos-${{ needs.build_iso.outputs.build_version }}-generic-amd64.iso build/live-image-amd64.hybrid.iso
+          sudo make test-interfaces | tee smoketest_make_test_interfaces.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: smoketest_make_test_interfaces
+          path: smoketest_make_test_interfaces.log
           retention-days: 30
           if-no-files-found: error
 
@@ -258,6 +289,7 @@ jobs:
       - test_config_load
       - test_raid1_install
       - test_smoketest_cli
+      - test_interfaces_cli
       - test_encrypted_config_tpm
       - build_iso
     runs-on: ubuntu-24.04
@@ -338,6 +370,7 @@ jobs:
       - test_config_load
       - test_raid1_install
       - test_smoketest_cli
+      - test_interfaces_cli
       - test_encrypted_config_tpm
       - build_iso
     runs-on: ubuntu-24.04
