@@ -1,6 +1,4 @@
 ## vyos-1x
-- openvpn: T3834: verify() is not allowed to change anything on the system
-   - PR: vyos/vyos-1x#3850
 - system_option: T5552: Apply IPv4 and IPv6 options after reapplying sysctls by TuneD
    - PR: vyos/vyos-1x#3853
 - op_mode: T6596: pppoe operation command failed
