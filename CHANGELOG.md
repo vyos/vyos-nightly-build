@@ -1,6 +1,4 @@
 ## vyos-1x
-- system_option: T5552: Apply IPv4 and IPv6 options after reapplying sysctls by TuneD
-   - PR: vyos/vyos-1x#3853
 - op_mode: T6596: pppoe operation command failed
    - PR: vyos/vyos-1x#3860
 - op_mode: T6593: Release DHCP interface does not work
