@@ -7,12 +7,12 @@ Public scheduler repo for the VyOS nightly ISO build. Runs `nightly-build.yml` d
 - GitHub Actions only (one orchestration workflow + CLA gate).
 - Minisign for signature: public key at `minisign.pub` (verifiable by ISO consumers).
 - `version.json` records the current latest build URL/version/timestamp.
-- Helper scripts in `bin/`.
+- Vendored `minisign` static binary in `bin/` (used for ISO signing at workflow runtime).
 
 ## Build / test / run
 The nightly run is automatic. Manual trigger via `workflow_dispatch` with inputs:
 - `BUILD_BY` (default `autobuild@vyos.net`)
-- `build_version` (default `1.5-rolling-<ISO8601>`)
+- `build_version` (default `1.5-rolling-YYYYMMDDHHMM`, e.g. `1.5-rolling-202604291200`)
 - `SKIP_SMOKETEST_RAID1`, `SKIP_SMOKETEST_CLI`, `SKIP_SMOKETEST_CONFIG`, `SKIP_SMOKETEST_TPM` (booleans)
 - `SKIP_RELEASE_PUBLISHING`, `SKIP_SLACK_NOTIFICATIONS`
 
@@ -27,7 +27,7 @@ minisign -V -p minisign.pub -m vyos-<ver>-amd64.iso
 ## Repository layout
 - `.github/workflows/nightly-build.yml` — orchestration (cron + dispatch).
 - `.github/workflows/cla-check.yml` — CLA gate via `vyos/vyos-cla-signatures/.github/workflows/cla-reusable.yml@current`.
-- `bin/` — helper scripts.
+- `bin/` — vendored `minisign` static binary for ISO signing.
 - `minisign.pub` — public verification key (committed).
 - `version.json` — most recent build metadata (URL, version, timestamp).
 - `CHANGELOG.md`, `README.md`.
