@@ -53,7 +53,3 @@ Mirror twin: `VyOS-Networks/vyos-nightly-build`. Treat the `vyos/*` side as cano
 - Skip toggles (`SKIP_SMOKETEST_*`, `SKIP_RELEASE_PUBLISHING`) exist for ad-hoc rebuilds; default everything OFF for normal nightly cadence.
 - The published `version.json` is read by the website (`sentrium/next-js-vyos`) and download-page tooling; format is an array of objects (`url`, `version`, `timestamp`).
 - Release notes pipeline lives separately in `andamasov/release-notes`; this repo only assembles the ISO and publishes the GitHub Release.
-
----
-
-This file is mirrored on Confluence: [`vyos/vyos-nightly-build`](https://internal.confluence.vyos.com/wiki/spaces/VYOS/pages/818053269). The Confluence page also carries the per-repo audit data (settings, workflows, secret counts, hygiene) that complements this CLAUDE.md. Edit either side; resync via the documentation pipeline.
