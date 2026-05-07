@@ -33,10 +33,9 @@ minisign -V -p minisign.pub -m vyos-<ver>-amd64.iso
 - `CHANGELOG.md`, `README.md`.
 
 ## Cross-repo context
-- Consumes the full build chain: `vyos/vyos-build` (toolchain) which in turn pulls per-package `.deb`s built via `VyOS-Networks/vyos-build-packages` from the 14 source repos in `repos.toml`.
+- Consumes the full build chain: `vyos/vyos-build` (toolchain) which in turn pulls per-package `.deb`s built via the internal build-packages workflow from the 14 source repos in `repos.toml`.
 - The reusable workflows in `vyos/.github` and the `pr-mirror-repo-sync.yml` pipeline don't touch this repo directly — this is a scheduler, not a code repo.
-- Sibling reusable build workflows for release trains live in `VyOS-Networks/vyos-stream-builds` (`vyos-reusable-build.yml`, `vyos-reusable-vpp-build.yml`, train-specific reusables for `circinus`/`sagitta`).
-- A predecessor exists at `VyOS-Networks/vyos-rolling-nightly-builds` (stale, last push 2024-06-01) — superseded by this repo.
+- Sibling reusable build workflows for release trains live in an internal repository (`vyos-reusable-build.yml`, `vyos-reusable-vpp-build.yml`, train-specific reusables for `circinus`/`sagitta`).
 - Release artifacts feed end-user-facing documentation in `vyos/vyos-documentation`.
 
 ## Conventions
@@ -44,9 +43,6 @@ minisign -V -p minisign.pub -m vyos-<ver>-amd64.iso
 - Default branch: `current`. ISO version strings carry the rolling timestamp form.
 - Many repo-level secrets (the orchestration needs cross-org PATs, signing keys, Slack tokens, release publishers) — managed by ops; never committed.
 - ISO signing key is sensitive: rotation is a coordinated security event.
-
-## Mirror relationship
-Mirror twin: `VyOS-Networks/vyos-nightly-build`. Treat the `vyos/*` side as canonical (this is a public, end-user-facing repo).
 
 ## Notes for future contributors
 - **Do not commit secrets** — all credentials and signing material flow through GitHub Actions secrets injected at workflow runtime.
