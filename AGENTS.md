@@ -16,12 +16,12 @@ The nightly run is automatic. Manual trigger via `workflow_dispatch` with inputs
 - `SKIP_SMOKETEST_RAID1`, `SKIP_SMOKETEST_CLI`, `SKIP_SMOKETEST_CONFIG`, `SKIP_SMOKETEST_TPM` (booleans)
 - `SKIP_RELEASE_PUBLISHING`, `SKIP_SLACK_NOTIFICATIONS`
 
-Verifying a published ISO:
+Verifying a published ISO (artifact name is `vyos-<ver>-generic-amd64.iso` per `version.json`):
 ```
 wget https://github.com/vyos/vyos-nightly-build/raw/refs/heads/current/minisign.pub
-wget <release>/vyos-<ver>-amd64.iso
-wget <release>/vyos-<ver>-amd64.iso.minisig
-minisign -V -p minisign.pub -m vyos-<ver>-amd64.iso
+wget <release>/vyos-<ver>-generic-amd64.iso
+wget <release>/vyos-<ver>-generic-amd64.iso.minisig
+minisign -V -p minisign.pub -m vyos-<ver>-generic-amd64.iso
 ```
 
 ## Repository layout
