@@ -1,18 +1,20 @@
-[![VyOS nightly build](https://github.com/vyos/vyos-nightly-build/actions/workflows/nightly-build.yml/badge.svg)](https://github.com/vyos/vyos-nightly-build/actions/workflows/nightly-build.yml)
-
 # About
 
-Scheduled VyOS image build - once per day (currently 00:00 UTC).
-
-Successfull builds will be published as GitHub Release and linked on the
-official download page https://vyos.net/get/nightly-builds/
+Release/artifact store for VyOS nightly build images. This repository does not
+run the build itself — it hosts the published nightly build
+[GitHub Releases](https://github.com/vyos/vyos-nightly-build/releases) (ISO
+images and their signatures), the signing public key, and `version.json` (the
+latest-build pointer). The build runs in the VyOS build infrastructure, which
+publishes the releases and updates `version.json` here on each successful nightly
+build; the results are linked from the official download page
+https://vyos.net/get/nightly-builds/
 
 ## How to check an image signature
 
 Download signature public key
 
 ```
-wget https://github.com/vyos/vyos-nightly-build/raw/refs/heads/current/minisign.pub
+wget https://github.com/vyos/vyos-nightly-build/raw/refs/heads/rolling/minisign.pub
 ```
 
 Download ISO image and signature file (example):
