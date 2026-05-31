@@ -3,9 +3,11 @@
 Release/artifact store for VyOS nightly build images. This repository does not
 run the build itself — it hosts the published nightly build
 [GitHub Releases](https://github.com/vyos/vyos-nightly-build/releases) (ISO
-images and their signatures) plus the signing public key. The images are
-produced by the VyOS build infrastructure and linked from the official download
-page https://vyos.net/get/nightly-builds/
+images and their signatures), the signing public key, and `version.json` (the
+latest-build pointer). The build runs in the VyOS build infrastructure, which
+publishes the releases and updates `version.json` here on each successful nightly
+build; the results are linked from the official download page
+https://vyos.net/get/nightly-builds/
 
 ## How to check an image signature
 
