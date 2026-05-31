@@ -306,7 +306,7 @@ jobs:
       - test_encrypted_config_tpm
       - build_generic_iso
     runs-on: ubuntu-24.04
-    if: ${{ failure() && (github.ref == 'refs/heads/current') && !inputs.SKIP_SLACK_NOTIFICATIONS }}
+    if: ${{ failure() && (github.ref == 'refs/heads/rolling') && !inputs.SKIP_SLACK_NOTIFICATIONS }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -388,7 +388,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
-    if: github.ref_name == 'current'
+    if: github.ref_name == 'rolling'
     steps:
       - uses: actions/checkout@v4
       - name: Clone vyos-build repo
