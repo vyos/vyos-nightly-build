@@ -25,6 +25,22 @@
    - PR: vyos/vyos-1x#5324
 - T9105: confirm existence of config-mode file before use
    - PR: vyos/vyos-1x#5337
+- image: T9021: Save bash history during image upgrade
+   - PR: vyos/vyos-1x#5344
+- firewall: T9076: add per-remote-group update interval
+   - PR: vyos/vyos-1x#5327
+- vpp: T8367: Fix identical default MAC on bridged loopback interfaces
+   - PR: vyos/vyos-1x#5335
+- T9107: Fix integration workflow after recent GitHub security updates
+   - PR: vyos/vyos-1x#5345
+- T9121: Fix linter workflow after recent GitHub changes
+   - PR: vyos/vyos-1x#5346
+- image: T9021: rename bash -> Bash to honor the projects name
+   - PR: vyos/vyos-1x#5348
+- T9125: Add new exception to the workflow that checks for typos
+   - PR: vyos/vyos-1x#5349
+- dhcp-server: T9093: allow option interface-mtu up to 16000
+   - PR: vyos/vyos-1x#5334
 
 
 ## vyos-build
@@ -46,5 +62,7 @@
    - PR: vyos/vyos-build#1248
 - T9099: improve test framework - add safeguards
    - PR: vyos/vyos-build#1247
+- Testsuite: T9021: answer question during test for bash_history migration
+   - PR: vyos/vyos-build#1250
 
 
