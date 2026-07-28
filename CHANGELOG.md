@@ -41,6 +41,10 @@
    - PR: vyos/vyos-1x#5349
 - dhcp-server: T9093: allow option interface-mtu up to 16000
    - PR: vyos/vyos-1x#5334
+- T9107: Fix integration workflow after recent GitHub security updates [vyos-1x]
+   - PR: vyos/vyos-1x#5357
+- qos: T9080: only delete ingress qdisc when interface has an ingress policy
+   - PR: vyos/vyos-1x#5351
 
 
 ## vyos-build
@@ -64,5 +68,11 @@
    - PR: vyos/vyos-build#1247
 - Testsuite: T9021: answer question during test for bash_history migration
    - PR: vyos/vyos-build#1250
+- T9124: Fix smoketest file check
+   - PR: vyos/vyos-build#1251
+- iproute2: T8926: add custom build which matches Kernel 6.18
+   - PR: vyos/vyos-build#1252
+- kernel: T9138: enable support for Microsoft MANA NIC driver
+   - PR: vyos/vyos-build#1254
 
 
