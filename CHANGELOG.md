@@ -74,5 +74,7 @@
    - PR: vyos/vyos-build#1252
 - kernel: T9138: enable support for Microsoft MANA NIC driver
    - PR: vyos/vyos-build#1254
+- build: T9140: include version and flavor information in the boot menu
+   - PR: vyos/vyos-build#1255
 
 
