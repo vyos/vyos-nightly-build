@@ -45,6 +45,18 @@
    - PR: vyos/vyos-1x#5357
 - qos: T9080: only delete ingress qdisc when interface has an ingress policy
    - PR: vyos/vyos-1x#5351
+- fstrim: T9133: skip /etc/fstab to properly identify devices to trim
+   - PR: vyos/vyos-1x#5358
+- vyos-netlinkd: T9143: seed operstate cache at startup
+   - PR: vyos/vyos-1x#5361
+- vpp: T9139: Check interface not referenced by a feature before removal
+   - PR: vyos/vyos-1x#5360
+- vpp: T8468: Apply MAC address changes on VPP interfaces
+   - PR: vyos/vyos-1x#5356
+- nhrp: T9128: fix duplicate nftables meter name for multiple redirect tunnels
+   - PR: vyos/vyos-1x#5355
+- configsession: T9156: add consistent use of finalizers
+   - PR: vyos/vyos-1x#5369
 
 
 ## vyos-build
@@ -76,5 +88,9 @@
    - PR: vyos/vyos-build#1254
 - build: T9140: include version and flavor information in the boot menu
    - PR: vyos/vyos-build#1255
+- Kernel: T9067: Update Linux Kernel to 6.18.41
+   - PR: vyos/vyos-build#1257
+- T9147: Bump accel-ppp-ng version to 9874ea3
+   - PR: vyos/vyos-build#1256
 
 
