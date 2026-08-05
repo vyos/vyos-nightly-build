@@ -57,6 +57,8 @@
    - PR: vyos/vyos-1x#5355
 - configsession: T9156: add consistent use of finalizers
    - PR: vyos/vyos-1x#5369
+- T9164: mergify: accept NOS- and legacy VD- Jira keys in task-id check
+   - PR: vyos/vyos-1x#5379
 
 
 ## vyos-build
