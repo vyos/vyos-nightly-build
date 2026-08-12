@@ -59,6 +59,38 @@
    - PR: vyos/vyos-1x#5369
 - T9164: mergify: accept NOS- and legacy VD- Jira keys in task-id check
    - PR: vyos/vyos-1x#5379
+- T9164: coderabbit: surface NOS Jira project alongside legacy VD
+   - PR: vyos/vyos-1x#5380
+- container: T7736: give container veths a deterministic host_interface_name
+   - PR: vyos/vyos-1x#5352
+- T9163: Fix typos in the completion help for the service conntrack-sync
+   - PR: vyos/vyos-1x#5378
+- sflow: T9065: Always set psample group even when egress sampling is disabled
+   - PR: vyos/vyos-1x#5320
+- qos: T8996: Implement set-dscp packet remarking for shaper policy
+   - PR: vyos/vyos-1x#5305
+- T9107: Fix integration workflow after recent GitHub security updates
+   - PR: vyos/vyos-1x#5386
+- flow-accounting: T9122: bind NetFlow export to the configured VRF
+   - PR: vyos/vyos-1x#5347
+- container: T7736: fix smoketest failures caused by netavark/aardvark-dns IPv6 DAD race
+   - PR: vyos/vyos-1x#5384
+- container: T9184: add chown capability
+   - PR: vyos/vyos-1x#5387
+- firewall: T7552: Output rule in verify_rule() ConfigError messages
+   - PR: vyos/vyos-1x#5377
+- qos: T9134: Fix commit crash when classes match different protocols
+   - PR: vyos/vyos-1x#5363
+- firewall: T8221: Add last-used option to firewall rules
+   - PR: vyos/vyos-1x#5365
+- op-mode: T7250: restore image/file path completion for show/copy/delete file
+   - PR: vyos/vyos-1x#5391
+- dhcp: T9167: align Kea HA timer defaults with Kea ARM
+   - PR: vyos/vyos-1x#5382
+- pki: T9135: derive ACME certificate chains from disk
+   - PR: vyos/vyos-1x#5388
+- vyos-netlinkd: T9086: ignore stale link-DOWN; drain netlink during commit
+   - PR: vyos/vyos-1x#5333
 
 
 ## vyos-build
@@ -94,5 +126,21 @@
    - PR: vyos/vyos-build#1257
 - T9147: Bump accel-ppp-ng version to 9874ea3
    - PR: vyos/vyos-build#1256
+- podman: T7736: update netavark and aardvark-dns packages
+   - PR: vyos/vyos-build#1259
+- T9164: accept NOS-/VD- Jira keys in task-id check; pin NOS in coderabbit
+   - PR: vyos/vyos-build#1260
+- T8329: Make the Azure VF-naming helper script 'vyos_vf_name' available in initramfs
+   - PR: vyos/vyos-build#1249
+- Kernel: T9170: support compressed modules when searching module firmware
+   - PR: vyos/vyos-build#1261
+- Kernel: T9181: modernize packaging and remove redundant work
+   - PR: vyos/vyos-build#1262
+- T9198: Update the accel-ppp-ng package version to 9654bb6
+   - PR: vyos/vyos-build#1264
+- Kernel: T9195: Update Linux Kernel to 6.18.44
+   - PR: vyos/vyos-build#1263
+- kernel: T9197: enable CONFIG_IWLMLD
+   - PR: vyos/vyos-build#1265
 
 
