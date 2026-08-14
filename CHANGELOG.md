@@ -91,6 +91,12 @@
    - PR: vyos/vyos-1x#5388
 - vyos-netlinkd: T9086: ignore stale link-DOWN; drain netlink during commit
    - PR: vyos/vyos-1x#5333
+- utils: T9185: fix ask_yes_no() busy-looping forever on non-tty stdin
+   - PR: vyos/vyos-1x#5390
+- utils: T9177: fix _are_same_ip() using wrong address family
+   - PR: vyos/vyos-1x#5383
+- T8598: CLI support to configure a secret which will be used along with calling-station-id, to generate Peer Interface Identifier (IID) - (BP # 2188)
+   - PR: vyos/vyos-1x#5396
 
 
 ## vyos-build
@@ -142,5 +148,7 @@
    - PR: vyos/vyos-build#1263
 - kernel: T9197: enable CONFIG_IWLMLD
    - PR: vyos/vyos-build#1265
+- T9206: Bump Syft version to 1.51.0
+   - PR: vyos/vyos-build#1267
 
 
