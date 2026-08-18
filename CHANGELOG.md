@@ -97,6 +97,34 @@
    - PR: vyos/vyos-1x#5383
 - T8598: CLI support to configure a secret which will be used along with calling-station-id, to generate Peer Interface Identifier (IID) - (BP # 2188)
    - PR: vyos/vyos-1x#5396
+- firewall: T9210: fix ruff findings in python/vyos/firewall.py
+   - PR: vyos/vyos-1x#5401
+- ddclient: T6981: Upgrade ddclient to v4.0.0
+   - PR: vyos/vyos-1x#5123
+- ntp: T9159: add source-address option for client requests
+   - PR: vyos/vyos-1x#5371
+- firewall: T8247: Normalize protocol values to protocol names
+   - PR: vyos/vyos-1x#5364
+- utils: T9185: revert the proposed fix ask_yes_no() busy-looping forever on non-tty stdin
+   - PR: vyos/vyos-1x#5402
+- boot: T3871: rework interface renaming and ordering
+   - PR: vyos/vyos-1x#5350
+- T9169: update for vyos1x-config refactor
+   - PR: vyos/vyos-1x#5395
+- T9169: update commit hashes for vyos1x-config refactor
+   - PR: vyos/vyos-1x#5403
+- firewall: T9210: bugfix in fqdn_resolve() exception handling
+   - PR: vyos/vyos-1x#5406
+- Debian: T9216: drop build time dependency on python3-vici
+   - PR: vyos/vyos-1x#5410
+- T3871: never guess a pending node's hardware when ambiguous
+   - PR: vyos/vyos-1x#5405
+- Makefile: T9222: pylint should use all available CPU cores
+   - PR: vyos/vyos-1x#5413
+- smoketest: T9218: wait for commit lock before cli_set/cli_delete too
+   - PR: vyos/vyos-1x#5411
+- xml: T9179: reject VRF names in interface-name constraint
+   - PR: vyos/vyos-1x#5393
 
 
 ## vyos-build
@@ -150,5 +178,29 @@
    - PR: vyos/vyos-build#1265
 - T9206: Bump Syft version to 1.51.0
    - PR: vyos/vyos-build#1267
+- T9203: Enrich SBOM files with additional metadata
+   - PR: vyos/vyos-build#1266
+- ddclient: T6981: Upgrade ddclient to v4.0.0
+   - PR: vyos/vyos-build#1159
+- Testsuite: T3871: change testcase to use multiple NIC drivers
+   - PR: vyos/vyos-build#1253
+- Testsuite: T9214: fix GRUB auto-boot race in console-select navigation
+   - PR: vyos/vyos-build#1269
+- Docker: T9216: remove dependency on VyOS binary repository
+   - PR: vyos/vyos-build#1270
+- Testsuite: T9214: make GRUB console-select navigation non-fatal on auto-boot race
+   - PR: vyos/vyos-build#1272
+- Testsuite: T9217: use separate SCSI controller for RAID-1 UEFI testcase
+   - PR: vyos/vyos-build#1271
+- Testsuite: T3871: extend testifname with diagnostics and mac-order regression
+   - PR: vyos/vyos-build#1268
+- T9014: Run smoketests on arm64 platform
+   - PR: vyos/vyos-build#1258
+- T9216: Revert "Docker: T9216: remove dependency on VyOS binary repository"
+   - PR: vyos/vyos-build#1273
+- T9209: Update the Strongswan version to 6.0.7-1
+   - PR: vyos/vyos-build#1274
+- T9187: Update accel-ppp-ng version to c7b67eb
+   - PR: vyos/vyos-build#1275
 
 
