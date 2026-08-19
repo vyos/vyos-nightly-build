@@ -125,6 +125,8 @@
    - PR: vyos/vyos-1x#5411
 - xml: T9179: reject VRF names in interface-name constraint
    - PR: vyos/vyos-1x#5393
+- T8482: reject commits referencing an incomplete policy object
+   - PR: vyos/vyos-1x#5416
 
 
 ## vyos-build
