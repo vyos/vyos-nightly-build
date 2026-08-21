@@ -127,6 +127,14 @@
    - PR: vyos/vyos-1x#5393
 - T8482: reject commits referencing an incomplete policy object
    - PR: vyos/vyos-1x#5416
+- interfaces: T9158: add option to enable/disable rx offload
+   - PR: vyos/vyos-1x#5373
+- container: T9229: add sys-rawio capability
+   - PR: vyos/vyos-1x#5419
+- T8329: Fix interface naming for Azure VF interfaces with Accelerated Networking enabled
+   - PR: vyos/vyos-1x#5338
+- vpp: T9057: Fix promiscuous mode not disabled on bond member detach
+   - PR: vyos/vyos-1x#5330
 
 
 ## vyos-build
@@ -200,7 +208,7 @@
    - PR: vyos/vyos-build#1258
 - T9216: Revert "Docker: T9216: remove dependency on VyOS binary repository"
    - PR: vyos/vyos-build#1273
-- T9209: Update the Strongswan version to 6.0.7-1
+- security: T9209: Update the Strongswan version to 6.0.7-1 fix for CVE-2026-47895
    - PR: vyos/vyos-build#1274
 - T9187: Update accel-ppp-ng version to c7b67eb
    - PR: vyos/vyos-build#1275
