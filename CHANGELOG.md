@@ -135,6 +135,8 @@
    - PR: vyos/vyos-1x#5338
 - vpp: T9057: Fix promiscuous mode not disabled on bond member detach
    - PR: vyos/vyos-1x#5330
+- kdump: T8868: Implement kernel crash dump support
+   - PR: vyos/vyos-1x#5325
 
 
 ## vyos-build
@@ -212,5 +214,7 @@
    - PR: vyos/vyos-build#1274
 - T9187: Update accel-ppp-ng version to c7b67eb
    - PR: vyos/vyos-build#1275
+- T9203: refactor SBOM generation script
+   - PR: vyos/vyos-build#1276
 
 
