@@ -137,6 +137,10 @@
    - PR: vyos/vyos-1x#5330
 - kdump: T8868: Implement kernel crash dump support
    - PR: vyos/vyos-1x#5325
+- http-api: T9224: add ping endpoint to REST API
+   - PR: vyos/vyos-1x#5415
+- http-api: T9223: add VRF option to traceroute REST API endpoint
+   - PR: vyos/vyos-1x#5414
 
 
 ## vyos-build
@@ -216,5 +220,7 @@
    - PR: vyos/vyos-build#1275
 - T9203: refactor SBOM generation script
    - PR: vyos/vyos-build#1276
+- podman: T9129: Fix podman prefix directory
+   - PR: vyos/vyos-build#1277
 
 
