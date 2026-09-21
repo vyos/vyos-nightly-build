@@ -1,11 +1,16 @@
 ## vyos-1x
-- ipsec: T8952: Allow per-peer strongSwan  override for site-to-site peers
-   - PR: vyos/vyos-1x#5475
-- T9323: typos: allow "localed" in the spell check
-   - PR: vyos/vyos-1x#5480
-- T8264: openvpn dco lifecycle
-   - PR: vyos/vyos-1x#5441
+- smoketest: T9316: do not race the DHCP client when checking VRF membership
+   - PR: vyos/vyos-1x#5471
+- openvpn: T9334: stop rendering "keepalive 0 0"
+   - PR: vyos/vyos-1x#5488
+- smoketest: T9316: match VRF process names by prefix, not equality
+   - PR: vyos/vyos-1x#5490
 
 
 ## vyos-build
-- no changes
+- T9330: openvpn: bump to 2.7.7
+   - PR: vyos/vyos-build#1307
+- vbash: T7575: Resolve completion on root-level op-mode
+   - PR: vyos/vyos-build#1308
+
+
