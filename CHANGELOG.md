@@ -9,6 +9,38 @@
    - PR: vyos/vyos-1x#5498
 - bgp: T9345: restore named-VRF AFI validation
    - PR: vyos/vyos-1x#5494
+- ppp: T9060: do not derive a link-local address from a synthetic MAC
+   - PR: vyos/vyos-1x#5500
+- T9274: Add more telegraf configuration
+   - PR: vyos/vyos-1x#5453
+- vpp: T9146: Enable DPDK no-multi-seg when a full frame fits the buffer
+   - PR: vyos/vyos-1x#5376
+- python: T8859: enforce positive integer min_keysize in verify_diffie_hellman_length
+   - PR: vyos/vyos-1x#5194
+- GitHub: T9215: ci workflow improvements for scutum and multi iso downloads
+   - PR: vyos/vyos-1x#5506
+- cli: T9077: insert literal '?' inside quoted values instead of triggering help
+   - PR: vyos/vyos-1x#5328
+- firewall: T9205: fix ruff findings in conf_mode/op_mode firewall.py
+   - PR: vyos/vyos-1x#5398
+- ipsec: T9303: use ipsec-acceleration for VPP algo check
+   - PR: vyos/vyos-1x#5495
+- bgp: T9360: update template to generate 'orf prefix-list both' if send/receive are both configured
+   - PR: vyos/vyos-1x#5507
+- T9323: ci scanner false positives
+   - PR: vyos/vyos-1x#5476
+- smoketest: T9303: move IPsec algorithm compatibility test to VPP testsuite
+   - PR: vyos/vyos-1x#5510
+- accel-ppp: T9357: do not require local users when any-login is configured
+   - PR: vyos/vyos-1x#5505
+- pppoe: T9356: do not fail commit when no Router Advertisement is received
+   - PR: vyos/vyos-1x#5504
+- T8977: Fix regression with is_addr_assigned and is_listen_port_bind_service 
+   - PR: vyos/vyos-1x#5266
+- dns: T9175: make PowerDNS security status poll opt-in
+   - PR: vyos/vyos-1x#5389
+- smoketest: T9361: remove superfluous debug output from config load tests
+   - PR: vyos/vyos-1x#5508
 
 
 ## vyos-build
