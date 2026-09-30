@@ -1,46 +1,32 @@
 ## vyos-1x
-- ipsec: T9320: Add deprecation warning for IKEv1 key-exchange
-   - PR: vyos/vyos-1x#5485
-- frr: T9344: remove dead code path when vyos-configd is not running
-   - PR: vyos/vyos-1x#5492
-- vxlan: T9319: add VXLAN-GBP support
-   - PR: vyos/vyos-1x#5484
-- dhcpv6-client: T9349: do not start dhcp6c in debug mode
-   - PR: vyos/vyos-1x#5498
-- bgp: T9345: restore named-VRF AFI validation
-   - PR: vyos/vyos-1x#5494
-- ppp: T9060: do not derive a link-local address from a synthetic MAC
-   - PR: vyos/vyos-1x#5500
-- T9274: Add more telegraf configuration
-   - PR: vyos/vyos-1x#5453
-- vpp: T9146: Enable DPDK no-multi-seg when a full frame fits the buffer
-   - PR: vyos/vyos-1x#5376
-- python: T8859: enforce positive integer min_keysize in verify_diffie_hellman_length
-   - PR: vyos/vyos-1x#5194
-- GitHub: T9215: ci workflow improvements for scutum and multi iso downloads
-   - PR: vyos/vyos-1x#5506
-- cli: T9077: insert literal '?' inside quoted values instead of triggering help
-   - PR: vyos/vyos-1x#5328
-- firewall: T9205: fix ruff findings in conf_mode/op_mode firewall.py
-   - PR: vyos/vyos-1x#5398
-- ipsec: T9303: use ipsec-acceleration for VPP algo check
-   - PR: vyos/vyos-1x#5495
-- bgp: T9360: update template to generate 'orf prefix-list both' if send/receive are both configured
-   - PR: vyos/vyos-1x#5507
-- T9323: ci scanner false positives
-   - PR: vyos/vyos-1x#5476
-- smoketest: T9303: move IPsec algorithm compatibility test to VPP testsuite
-   - PR: vyos/vyos-1x#5510
-- accel-ppp: T9357: do not require local users when any-login is configured
-   - PR: vyos/vyos-1x#5505
-- pppoe: T9356: do not fail commit when no Router Advertisement is received
-   - PR: vyos/vyos-1x#5504
-- T8977: Fix regression with is_addr_assigned and is_listen_port_bind_service 
-   - PR: vyos/vyos-1x#5266
 - dns: T9175: make PowerDNS security status poll opt-in
    - PR: vyos/vyos-1x#5389
 - smoketest: T9361: remove superfluous debug output from config load tests
    - PR: vyos/vyos-1x#5508
+- T9337: openvpn: stop rendering "ping 0" in site-to-site
+   - PR: vyos/vyos-1x#5511
+- ntp: T8882: add ntp polling options
+   - PR: vyos/vyos-1x#5204
+- pim: T9362: prevent killing an already dead/non-existing PID
+   - PR: vyos/vyos-1x#5509
+- op-mode: T9354: replace "reset connection" with "reconnect interface"
+   - PR: vyos/vyos-1x#5503
+- wwan: T9350: possible dead interface after boot, disconnect does not stick
+   - PR: vyos/vyos-1x#5499
+- T9338: add bgp mpls l3vpn-multi-domain-switching
+   - PR: vyos/vyos-1x#5496
+- openvpn: T8999: improve shared-secret reference errors
+   - PR: vyos/vyos-1x#5397
+- T9363: openvpn: site2site keepalive timeout
+   - PR: vyos/vyos-1x#5512
+- http-api: T8989: Hotfix to enforce audience validation if OIDC is configured
+   - PR: vyos/vyos-1x#5491
+- ethtool: T9353: added basex to check_speed_duplex
+   - PR: vyos/vyos-1x#5501
+- wwan: T7487: identify modem by port ownership, not interface number
+   - PR: vyos/vyos-1x#5483
+- smoketest: T9367: only assert on the leaked flows in the VRF conntrack zone
+   - PR: vyos/vyos-1x#5518
 
 
 ## vyos-build
