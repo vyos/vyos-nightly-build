@@ -1,42 +1,74 @@
 ## vyos-1x
-- T9341: Fix consistency of legacy templates, xml_ref cache, and reference tree
-   - PR: vyos/vyos-1x#5493
-- T9365: add bindings for reference tree path from config path util
-   - PR: vyos/vyos-1x#5513
-- policy: T9379: prefix-list duplicate check in linear time
-   - PR: vyos/vyos-1x#5525
-- webproxy: T9371: fix typo in the squidGuard local-block-url rule ACL
-   - PR: vyos/vyos-1x#5522
-- pppoe: T9395: render default routes via FRR only
-   - PR: vyos/vyos-1x#5532
-- frrender: T9377: do not save the FRR configuration a second time
-   - PR: vyos/vyos-1x#5524
-- config-mgmt: T9399: read the committed config once in the post-commit hooks
-   - PR: vyos/vyos-1x#5533
 - op-mode: T861: add "show secure-boot detail" command
    - PR: vyos/vyos-1x#5537
 - agents: T9348: update content in AGENTS.md to improve AI generated changes
    - PR: vyos/vyos-1x#5497
+- T9351: Accel-PPP-NG: Add CLI support for Message Authenticator attribute in Access packets (Blast-RADIUS mitigation)
+   - PR: vyos/vyos-1x#5442
+- bgp: T9404: do not render "bgp default local-preference" when the value is 100
+   - PR: vyos/vyos-1x#5536
+- bgp: T9407: do not render "bgp reject-as-sets" when it is the FRR default
+   - PR: vyos/vyos-1x#5538
+- openvpn: T9370: add chacha20poly1305 data cipher
+   - PR: vyos/vyos-1x#5523
+- router-advert: T9413: add no-remove-on-exit and no-flush-* options
+   - PR: vyos/vyos-1x#5541
+- bgp: T9410: add route-map vrf import under ipv6-unicast
+   - PR: vyos/vyos-1x#5540
+- configd: T9368: reconcile FRR after a DHCP lease without the commit socket
+   - PR: vyos/vyos-1x#5520
+- vpp: T9161: Enforce NIC MTU limit and apply MTU to VLAN sub-interfaces
+   - PR: vyos/vyos-1x#5445
+- interfaces: T9152: Refactor source-validation to use vmaps
+   - PR: vyos/vyos-1x#5366
+- config-management: T6304: Rewrite commit-archive location into a structured CLI
+   - PR: vyos/vyos-1x#5502
+- T9386: openvpn: reject AEAD fallback cipher with shared-secret-key
+   - PR: vyos/vyos-1x#5547
+- ospf: T9448: do not render metric-type when it is the default
+   - PR: vyos/vyos-1x#5545
+- firewall: T9332: fix GeoIP source/destination nftables set name colli…
+   - PR: vyos/vyos-1x#5487
+- container: T9401: add chown option to tmpfs mounts
+   - PR: vyos/vyos-1x#5534
+- pseudo-ethernet: T9253: fix anycast-gateway with shared MAC on bridge VLANs
+   - PR: vyos/vyos-1x#5539
+- debian: T9455: drop exfat-fuse in favour of in-kernel exFAT driver
+   - PR: vyos/vyos-1x#5553
+- vpp: T9161: Fix smoketests failing on NICs capped at 1500 MTU
+   - PR: vyos/vyos-1x#5546
+- T9374: T9375: T9397: T9405: update commit hash
+   - PR: vyos/vyos-1x#5554
+- container: T9456: use kernel overlayfs unless storage sits on overlayfs
+   - PR: vyos/vyos-1x#5552
+- vyos-router: T9447: stop copying a directory when restoring the bootup hooks
+   - PR: vyos/vyos-1x#5544
+- T9408: Smoke-test : ‘test_system_login.py’ - ARM not supported
+   - PR: vyos/vyos-1x#5548
+- T7886: add a general method for verifying interface reverse dependencies
+   - PR: vyos/vyos-1x#5478
+- http-api: T9453: wait for the API server to be ready after a reload
+   - PR: vyos/vyos-1x#5550
+- dhcp: T9108: restart dhclient when unicast RENEW is overdue
+   - PR: vyos/vyos-1x#5341
+- dhcp-server: T9267: add client-class matching on hostname/vendor-class-id
+   - PR: vyos/vyos-1x#5436
+- frrender: T9454: render FRR after a DHCP lease only once the commit completed
+   - PR: vyos/vyos-1x#5551
+- GitHub: T9452: name pull request smoketest ISO after the PR number
+   - PR: vyos/vyos-1x#5549
 
 
 ## vyos-build
-- T861: Finalize VyOS kernel signing for UEFI Secure Boot
-   - PR: vyos/vyos-build#1313
-- Kernel: T9014: regenerate arm64 base config against Linux 6.18 
-   - PR: vyos/vyos-build#1314
-- Kernel: T9385: Update Linux Kernel to 6.18.54
-   - PR: vyos/vyos-build#1315
-- T9392: Keep kernel objects and don't create source tarball by default
-   - PR: vyos/vyos-build#1316
-- Kernel: T9385: Update Linux Kernel to 6.18.55
-   - PR: vyos/vyos-build#1317
-- Testsuite: T861: boot VyOS CA signed images as-is in Secure Boot test
-   - PR: vyos/vyos-build#1320
-- smoketest: T9402: stop navigating the installed system's GRUB menu
-   - PR: vyos/vyos-build#1319
-- agents: T9348: update content in AGENTS.md to improve AI generated changes
-   - PR: vyos/vyos-build#1310
-- T9400: Fix APT repository key for Debian Trixie release
-   - PR: vyos/vyos-build#1318
+- T9409: Bump accel-ppp-ng version to dd07b23
+   - PR: vyos/vyos-build#1321
+- Kernel: T9197: package iwlwifi firmware the 6.18 driver actually loads
+   - PR: vyos/vyos-build#1323
+- T9454: Upgrade FRR to 10.7.1
+   - PR: vyos/vyos-build#1322
+- T861: Remove leftover packages related to Secure Boot process
+   - PR: vyos/vyos-build#1325
+- T7142: Update HAProxy version to 3.0.29
+   - PR: vyos/vyos-build#1324
 
 
