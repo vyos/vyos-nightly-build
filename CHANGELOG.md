@@ -11,7 +11,20 @@
    - PR: vyos/vyos-1x#5562
 - policy: T9346: Allow dot in  and  names
    - PR: vyos/vyos-1x#5560
+- T861: remove install mok command and redundant mokutil sudoers rule
+   - PR: vyos/vyos-1x#5569
+- wwan: T9388: request an IPv6 bearer for autoconf without an address node
+   - PR: vyos/vyos-1x#5564
+- ospf: T9441: drop "parameters opaque-lsa" (migrated to "capability opaque") and render "compatible rfc1583" as FRR prints it
+   - PR: vyos/vyos-1x#5543
+- isis: T9227: add distribute link-state command
+   - PR: vyos/vyos-1x#5570
 
 
 ## vyos-build
-- no changes
+- Kernel: T9470: Update Linux Kernel to 6.18.57
+   - PR: vyos/vyos-build#1327
+- Testsuite: T861: enroll dev shim certificate using mokutil
+   - PR: vyos/vyos-build#1328
+
+
