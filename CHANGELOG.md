@@ -1,30 +1,25 @@
 ## vyos-1x
-- dhcp: T9108: restart dhclient when unicast RENEW is overdue
-   - PR: vyos/vyos-1x#5341
-- dhcp-server: T9267: add client-class matching on hostname/vendor-class-id
-   - PR: vyos/vyos-1x#5436
-- frrender: T9454: render FRR after a DHCP lease only once the commit completed
-   - PR: vyos/vyos-1x#5551
-- GitHub: T9452: name pull request smoketest ISO after the PR number
-   - PR: vyos/vyos-1x#5549
-- vpp: T9300: Validate every GRE member of a VPP bridge
-   - PR: vyos/vyos-1x#5562
-- policy: T9346: Allow dot in  and  names
-   - PR: vyos/vyos-1x#5560
-- T861: remove install mok command and redundant mokutil sudoers rule
-   - PR: vyos/vyos-1x#5569
-- wwan: T9388: request an IPv6 bearer for autoconf without an address node
-   - PR: vyos/vyos-1x#5564
-- ospf: T9441: drop "parameters opaque-lsa" (migrated to "capability opaque") and render "compatible rfc1583" as FRR prints it
-   - PR: vyos/vyos-1x#5543
-- isis: T9227: add distribute link-state command
-   - PR: vyos/vyos-1x#5570
+- kdump: T8868: skip kdump-tools when no crashkernel= is set
+   - PR: vyos/vyos-1x#5576
+- nat: T9475: commit failures and weight issue in load-balancing, translation issues for port-ranges
+   - PR: vyos/vyos-1x#5574
+- wlb: T9472: silent daemon failures, ignored options and connections broken by commits
+   - PR: vyos/vyos-1x#5571
+- dhcp: T9108: silence per-run systemd messages of the lease-watch timer
+   - PR: vyos/vyos-1x#5580
+- GitHub: T9452: run ISO version step under bash so PR names apply
+   - PR: vyos/vyos-1x#5577
+- bgp: T9450: stop re-sending unchanged BGP lines to FRR on every commit
+   - PR: vyos/vyos-1x#5578
+- policy: T9394: reject route-map deletion if still used inside VRF instance
+   - PR: vyos/vyos-1x#5579
+- isis: T9485: only enable SR-MPLS when MPLS segment-routing configured
+   - PR: vyos/vyos-1x#5581
+- haproxy: T9097: add ssl checks-only for TLS health checks
+   - PR: vyos/vyos-1x#5529
+- firewall: T9474: multiple issues in rule processing (time based rules, fragment matching and failing commits)
+   - PR: vyos/vyos-1x#5573
 
 
 ## vyos-build
-- Kernel: T9470: Update Linux Kernel to 6.18.57
-   - PR: vyos/vyos-build#1327
-- Testsuite: T861: enroll dev shim certificate using mokutil
-   - PR: vyos/vyos-build#1328
-
-
+- no changes
