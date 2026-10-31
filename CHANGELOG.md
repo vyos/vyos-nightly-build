@@ -1,12 +1,4 @@
 ## vyos-1x
-- cgnat: T9473: invalid input crashes commit and overlapping pools hand out the same external address and ports
-   - PR: vyos/vyos-1x#5572
-- T9529: Fix typo resulting in double free in validate_tree_* functions
-   - PR: vyos/vyos-1x#5601
-- op-mode: T9530: Fix private key check in OpenVPN client config generator
-   - PR: vyos/vyos-1x#5604
-- op-mode: T9528: Fix OpenConnect OTP display for hotp-event token type
-   - PR: vyos/vyos-1x#5603
 - geoip: T9495: fix PATH for geoip cron task
    - PR: vyos/vyos-1x#5587
 - pppoe: T9533: Fix default route handling in connect-on-demand mode
@@ -17,7 +9,20 @@
    - PR: vyos/vyos-1x#5605
 - op-mode: T9538: fix interface check in reset wireguard
    - PR: vyos/vyos-1x#5608
+- nat64: T9536: Fix check for only one source rule
+   - PR: vyos/vyos-1x#5609
+- nhrp: T9546: Remove nftables rules when NHRP is deleted
+   - PR: vyos/vyos-1x#5613
+- firewall: T9549: Fix default-firewall jump for VRF zone in local zone
+   - PR: vyos/vyos-1x#5614
+- zabbix-agent: T9545: Fix PSK authentication mode validation
+   - PR: vyos/vyos-1x#5611
+- firewall: T9544: Fix fqdn match in prerouting raw rules
+   - PR: vyos/vyos-1x#5610
 
 
 ## vyos-build
-- no changes
+- Kernel: T9550: Update Linux Kernel to 6.18.60
+   - PR: vyos/vyos-build#1339
+
+
