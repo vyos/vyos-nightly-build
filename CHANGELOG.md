@@ -1,22 +1,15 @@
 ## vyos-1x
-- static: T9482: handle a blackhole next to a next-hop of the same distance
-   - PR: vyos/vyos-1x#5582
-- ha: T9557: Verify real-server port for every virtual-server
-   - PR: vyos/vyos-1x#5620
-- ipsec: T9542: replace removed ipsec script with swanctl and systemctl
-   - PR: vyos/vyos-1x#5612
-- op-mode: T9496: verify secure-boot signature when using "add system image"
-   - PR: vyos/vyos-1x#5602
-- T9477: remove no longer needed executable bit from conf_mode/migration scripts 
-   - PR: vyos/vyos-1x#5588
-- xml: T9555: replace inline nodes duplicating existing include files
-   - PR: vyos/vyos-1x#5618
-- interfaces: T3871: drop executable bit from 34-to-35 migration script
-   - PR: vyos/vyos-1x#5624
+- openvpn: T9560: Render tls-auth in site-to-site mode
+   - PR: vyos/vyos-1x#5621
+- T9562: Fix typo in vyos.config passing method instead of function value in is_multi/is_tag/is_leaf
+   - PR: vyos/vyos-1x#5622
+- serial: T9567: honor booted serial console during 31 -> 32 migration
+   - PR: vyos/vyos-1x#5627
+- webproxy: T9566: Pass LDAP bind password via file instead of command line
+   - PR: vyos/vyos-1x#5626
+- openvpn: T9469: add TLS key to generated client config
+   - PR: vyos/vyos-1x#5567
 
 
 ## vyos-build
-- build: T9547: rolling images use the 999 default version instead of 1.5
-   - PR: vyos/vyos-build#1341
-
-
+- no changes
