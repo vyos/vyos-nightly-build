@@ -1,24 +1,30 @@
 ## vyos-1x
-- T9662: raise ConfigError if TACACS is configured without a server
-   - PR: vyos/vyos-1x#5667
-- T9605: system-option: do not fail commits on dynamic debug writes
-   - PR: vyos/vyos-1x#5660
+- T9621: Fix firewall negated time weekdays
+   - PR: vyos/vyos-1x#5657
+- conf-mode: T9672: add missing f-string prefixes to error messages
+   - PR: vyos/vyos-1x#5675
+- configd: T9515: render FRR unless a routing script failed
+   - PR: vyos/vyos-1x#5635
+- dhcp-server: T9674: enforce Kea data directory ownership on every commit
+   - PR: vyos/vyos-1x#5677
+- T9508: add support for completion of values of reference tree paths
+   - PR: vyos/vyos-1x#5592
+- op-mode: T9667: raise an error for an unknown protocol in reset vpn
+   - PR: vyos/vyos-1x#5671
+- wan-load-balancing: T9671: show the warning for an empty firewall group
+   - PR: vyos/vyos-1x#5674
+- remote: T9619: Fix commit-archive in a VRF for non-root users
+   - PR: vyos/vyos-1x#5656
+- tech-support: T9654: Enhance archive security by permissions
+   - PR: vyos/vyos-1x#5668
+- firewall: T9463: fix migration repointing rules at the wrong group
+   - PR: vyos/vyos-1x#5559
 
 
 ## vyos-build
-- Kernel: T9598: Update Linux Kernel to 6.18.63
-   - PR: vyos/vyos-build#1358
-- Kernel: T9628: Update Linux Kernel to 6.18.64
-   - PR: vyos/vyos-build#1360
-- T9627: Update frr_exporter version to v1.12.0 for OSPF metrics
-   - PR: vyos/vyos-build#1359
-- container: T9626: remove VyOS Kernel modules from the OCI image
-   - PR: vyos/vyos-build#1361
-- smoketest: T9634: boot into upgraded image in image update test
-   - PR: vyos/vyos-build#1363
-- Kernel: T9636: enable Realtek rtw88 and rtw89 wireless drivers
-   - PR: vyos/vyos-build#1364
-- frr: T9622: fix nhrpd use-after-free on GRE tunnel deletion
-   - PR: vyos/vyos-build#1357
+- Kernel: T9682: Update Linux Kernel to 6.18.65
+   - PR: vyos/vyos-build#1373
+- Kernel: T9682: perf jitdump: include linux/string.h for strlcpy()
+   - PR: vyos/vyos-build#1374
 
 
